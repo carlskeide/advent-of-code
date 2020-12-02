@@ -10,11 +10,24 @@ import re
 from collections import Counter
 
 
-def task2(pol, pwd):
+def part1(pol, pwd):
     letters = Counter(pwd)
     r_min, r_max, letter = re.match(r"^(\d+)-(\d+) *([a-z])", pol).groups()
 
     return (int(r_min) <= letters[letter] <= int(r_max))
+
+
+# Each policy actually describes two positions in the password, where 1 means
+# the first character, 2 means the second character, and so on.
+# (Be careful; Toboggan Corporate Policies have no concept of "index zero"!)
+# Exactly one of these positions must contain the given letter.
+# Other occurrences of the letter are irrelevant for the purposes of
+# policy enforcement.
+
+def part2(pol, pwd):
+    pos_1, pos_2, letter = re.match(r"^(\d+)-(\d+) *([a-z])", pol).groups()
+
+    return (pwd[int(pos_1) - 1] == letter) != (pwd[int(pos_2) - 1] == letter)
 
 
 if __name__ == "__main__":
@@ -24,5 +37,8 @@ if __name__ == "__main__":
             for line in f.readlines() if line
         ]
 
-    valid_passwords = [task2(*sig) for sig in passwords]
-    print(f"Task 2: {sum(valid_passwords)} of {len(passwords)} are valid")
+    valid_part1 = [part1(*sig) for sig in passwords]
+    print(f"Part 1: {sum(valid_part1)} of {len(passwords)} are valid")
+
+    valid_part2 = [part2(*sig) for sig in passwords]
+    print(f"Part 2: {sum(valid_part2)} of {len(passwords)} are valid")
