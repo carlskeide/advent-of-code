@@ -13,17 +13,18 @@ def toboggan(terrain, delta_x, delta_y):
     while True:
         try:
             row = terrain[y]
+            yield row[x % len(row)] == "#"
+
+            x += delta_x
+            y += delta_y
+
         except IndexError:
             return
-
-        yield row[x] == "#"
-        x += delta_x
-        y += delta_y
 
 
 if __name__ == "__main__":
     with open("./task3.input") as f:
-        terrain = [line.strip() * 255 for line in f.readlines() if line]
+        terrain = [line.strip() for line in f.readlines() if line]
 
     steps = list(toboggan(terrain, delta_x=3, delta_y=1))
     print(f"Part 1: hit {sum(steps)} trees out of {len(steps)} steps")
