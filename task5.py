@@ -32,32 +32,23 @@ def seat_id(row, col):
     return row * 8 + col
 
 
-def get_free_seats(boarding_passes):
-    free_seats = [[(row, col) for col in range(8)] for row in range(128)]
-    for row, col in map(decode, boarding_passes):
-        free_seats[row][col] = False
-
-    return free_seats
-
-
-def find_seat(free_seats):
-    for row in free_seats:
-        for free_seat_id in [seat_id(*seat) for seat in row if seat]:
-            yield free_seat_id
+def free_seat_ids(occupied):
+    all_seats = ((row, col) for row in range(128) for col in range(8))
+    return (seat_id(*seat) for seat in all_seats if seat not in occupied)
 
 
 if __name__ == "__main__":
     with open("./task5.input") as f:
-        boarding_passes = [line.strip() for line in f.readlines() if line]
+        occupied = [decode(line.strip()) for line in f.readlines() if line]
 
-    seat_ids = [seat_id(row, col) for row, col in map(decode, boarding_passes)]
-    print(f"Part 1: {max(seat_ids)}")
+    occupied_ids = [seat_id(row, col) for row, col in occupied]
+    print(f"Part 1: {max(occupied_ids)}")
 
-    free_seats = get_free_seats(boarding_passes)
-    for free_seat_id in find_seat(free_seats):
-        if free_seat_id - 1 in seat_ids and free_seat_id + 1 in seat_ids:
-            print(f"Part 2: {free_seat_id}")
+    for free_id in free_seat_ids(occupied):
+        if free_id - 1 in occupied_ids and free_id + 1 in occupied_ids:
             break
 
     else:
         raise ValueError("Didn't find a free seat")
+
+    print(f"Part 2: {free_id}")
