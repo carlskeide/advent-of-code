@@ -8,15 +8,19 @@ class Bag:
     def __init__(self, rule):
         color, content = self.parse_rule(rule)
         self.color = color
-        self.content = {
-            clr: int(qty) for qty, clr
+        self.charter = [
+            (int(quantity), color) for quantity, color
             in self.parse_contents(content)
-        }
+        ]
 
-    def parse_rule(self, text):
+        self.content = []
+
+    @staticmethod
+    def parse_rule(text):
         return re.match(r"^(.*) bags contain ([\w\s,]+).", text).groups()
 
-    def parse_contents(self, text):
+    @staticmethod
+    def parse_contents(text):
         if text == "no other bags":
             return []
 
@@ -25,25 +29,20 @@ class Bag:
             for bag in text.split(",")
         )
 
+    def fill_bag(self, all_bags):
+        for quantity, color in self.charter:
+            self.content.extend(quantity * [all_bags[color]])
 
-def search_bag(bags, bag_color, color):
-    if bag_color == color:
-        return True
+    def search(self, color):
+        for bag in set(self.content):
+            if bag.color == color or bag.search(color):
+                return True
 
-    for inner_color in bags[bag_color].content:
-        if search_bag(bags, inner_color, color):
-            return True
+        else:
+            return False
 
-    else:
-        return False
-
-
-def count_bags(bags, bag_color):
-    count = 0
-    for inner_color, quantity in bags[bag_color].content.items():
-        count += quantity + (quantity * count_bags(bags, inner_color))
-
-    return count
+    def count_contents(self):
+        return sum(bag.count_contents() + 1 for bag in self.content)
 
 
 if __name__ == "__main__":
@@ -51,11 +50,11 @@ if __name__ == "__main__":
         task_input = [line.strip() for line in f.readlines() if line]
 
     bags = {bag.color: bag for bag in map(Bag, task_input)}
-    part1 = [
-        search_bag(bags, color, "shiny gold") for color in bags
-        if color != "shiny gold"  # Must be nested at least once
-    ]
+    for bag in bags.values():
+        bag.fill_bag(bags)
+
+    part1 = [bag.search("shiny gold") for bag in bags.values()]
     print(f"Part 1: {sum(part1)}")
 
-    part2 = count_bags(bags, "shiny gold")
+    part2 = bags["shiny gold"].count_contents()
     print(f"Part 2: {part2}")
