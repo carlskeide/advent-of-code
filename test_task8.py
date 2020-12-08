@@ -27,3 +27,7 @@ class TestGameConsole(TestCase):
         line, accumulator = exc.exception.args
         self.assertEqual(line, 1)
         self.assertEqual(accumulator, 5)
+
+        program[7] = program[7].replace("jmp", "nop")
+        console = GameConsole(program)
+        console.run()

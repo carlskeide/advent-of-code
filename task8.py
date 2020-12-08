@@ -63,13 +63,11 @@ class GameConsole:
         below it is executed next.
         """
 
-        print(f"{self.index}: {cmd} {arg}")
+        # print(f"{self.index}: {cmd} {arg}")
 
         if cmd == "acc":
             self.accumulator += arg
             self.index += 1
-
-            print(f"Accumulator: {self.accumulator}")
 
         elif cmd == "jmp":
             self.index += arg
@@ -83,12 +81,35 @@ class GameConsole:
 
 if __name__ == "__main__":
     with open("./task8.input") as f:
-        console = GameConsole([line.strip() for line in f.readlines() if line])
+        program = [line.strip() for line in f.readlines() if line]
 
+    console = GameConsole(program)
+    try:
+        console.run()
+
+    except InfiniteLoopError as e:
+        print(f"Caught {e!r}")
+
+    print(f"Part 1: {console.accumulator}")
+
+    for i, line in enumerate(program):
+        dbg_program = program.copy()
+
+        if line.startswith("jmp"):
+            dbg_program[i] = line.replace("jmp", "nop")
+
+        elif line.startswith("nop"):
+            dbg_program[i] = line.replace("nop", "jmp")
+
+        else:
+            continue
+
+        console = GameConsole(dbg_program)
         try:
             console.run()
+            break
 
-        except InfiniteLoopError as e:
-            print(f"Caught {e!r}")
+        except InfiniteLoopError:
+            continue
 
-        print(f"Part 1: {console.accumulator}")
+    print(f"Part 2: {console.accumulator}")
