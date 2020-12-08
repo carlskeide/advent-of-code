@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
 # coding=utf-8
+from utils import load_input
 
 import re
 
@@ -46,10 +46,7 @@ class Bag:
 
 
 if __name__ == "__main__":
-    with open("./task7.input") as f:
-        task_input = [line.strip() for line in f.readlines() if line]
-
-    bags = {bag.color: bag for bag in map(Bag, task_input)}
+    bags = {bag.color: bag for bag in map(Bag, load_input(day=7))}
     for bag in bags.values():
         bag.fill_bag(bags)
 

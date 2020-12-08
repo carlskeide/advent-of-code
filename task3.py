@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
 # coding=utf-8
-
-# Starting at the top-left corner of your map and following a slope of
-# right 3 and down 1, how many trees would you encounter?
+from utils import load_input
 
 from math import prod
 
@@ -15,9 +12,7 @@ def toboggan(terrain, delta_x, delta_y):
 
 
 if __name__ == "__main__":
-    with open("./task3.input") as f:
-        terrain = [line.strip() for line in f.readlines() if line]
-
+    terrain = load_input(day=3)
     print(f"Part 1: hit {sum(toboggan(terrain, delta_x=3, delta_y=1))} trees")
 
     trees_hit = []

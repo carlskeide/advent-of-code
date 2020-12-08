@@ -1,15 +1,11 @@
-#!/usr/bin/env python3
 # coding=utf-8
-
-# Duplicate answers to the same question don't count extra; each question
-# counts at most once
+from utils import load_input
 
 from functools import reduce
 
 
 if __name__ == "__main__":
-    with open("./task6.input") as f:
-        answers = f.read().split("\n\n")
+    answers = load_input(day=6, group_lines=True)
 
     distinct_answers = [len(set(group.replace('\n', ''))) for group in answers]
     print(f"Part 1: {sum(distinct_answers)}")

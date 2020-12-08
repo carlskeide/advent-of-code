@@ -1,5 +1,7 @@
-#!/usr/bin/env python3
 # coding=utf-8
+from utils import load_input
+
+import re
 
 # byr (Birth Year) - four digits; at least 1920 and at most 2002.
 # iyr (Issue Year) - four digits; at least 2010 and at most 2020.
@@ -11,9 +13,6 @@
 # ecl (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
 # pid (Passport ID) - a nine-digit number, including leading zeroes.
 # cid (Country ID) - ignored, missing or not.
-
-import re
-
 validators = {
     "byr": lambda x: (1920 <= int(x) <= 2002),
     "iyr": lambda x: (2010 <= int(x) <= 2020),
@@ -45,8 +44,7 @@ def validate_strict(passport):
 
 
 if __name__ == "__main__":
-    with open("./task4.input") as f:
-        passports = f.read().split("\n\n")
+    passports = load_input(day=4, group_lines=True)
 
     result = [validate_fields(passport) for passport in passports]
     print(f"Part 1: Valid passports {sum(result)} of {len(result)}")

@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
 # coding=utf-8
+from utils import load_input
 
 from typing import Iterable, Tuple
 
@@ -80,9 +80,7 @@ class GameConsole:
 
 
 if __name__ == "__main__":
-    with open("./task8.input") as f:
-        program = [line.strip() for line in f.readlines() if line]
-
+    program = load_input(day=8)
     console = GameConsole(program)
     try:
         console.run()
