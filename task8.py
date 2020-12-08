@@ -31,7 +31,7 @@ class GameConsole:
         line of text. Each instruction consists of an operation
         (acc, jmp, or nop) and an argument (a signed number like +4 or -20).
         """
-        while self.index < len(self.program):
+        while self.index != len(self.program):
             self._circuit_breaker()
             cmd, arg = self.program[self.index]
             self._execute(cmd, arg)
