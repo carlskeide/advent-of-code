@@ -1,5 +1,5 @@
 # coding=utf-8
-from utils import load_input
+from . import load_input
 
 from math import prod
 
