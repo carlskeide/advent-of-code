@@ -2,8 +2,6 @@
 from . import load_input
 
 from collections import Counter
-from itertools import combinations
-from multiprocessing.dummy import Pool
 
 
 def jolt_differences(adapters, output=None):
@@ -11,28 +9,26 @@ def jolt_differences(adapters, output=None):
     return (jolts[i] - jolts[(i - 1)] for i in range(1, len(jolts)))
 
 
-def all_arrangements(adapters):
-    for i in range(1, len(adapters) + 1):
-        for candidate in combinations(adapters, i):
-            yield candidate
+def traverse(cur, nodes):
+    valid = 0
+
+    if cur < 4:
+        valid += 1
+
+    for i in range(len(nodes)):
+        forward = nodes.copy()
+        next_node = forward.pop(i)
+
+        if 0 < (cur - next_node) < 4:
+            valid += traverse(cur=next_node, nodes=forward)
+
+    return valid
 
 
 def valid_arrangements(adapters):
     output = max(adapters) + 3
-    arrangements = all_arrangements(adapters)
-
-    def is_valid(adapters):
-        return all(jolt < 4 for jolt in jolt_differences(adapters, output))
-
-    print("starting count")
-    # return sum(is_valid(candidate) for candidate in arrangements)
-
-    pool = Pool(8)
-    num_valid = 0
-    for result in pool.imap_unordered(is_valid, arrangements):
-        num_valid += 1
-
-    return num_valid
+    valid_paths = traverse(output, adapters)
+    return valid_paths
 
 
 if __name__ == "__main__":
@@ -42,5 +38,4 @@ if __name__ == "__main__":
     counter = dict(Counter(differences))
     print(f"Part 1: {counter[1] * counter[3]}")
 
-    part2 = ""
-    print(f"Part 2: {part2}")
+    print(f"Part 2: {valid_arrangements(task_input)}")
