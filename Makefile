@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := new
-day ?= 1
+day ?= $(shell date "+%-d")
 
 new:
 ifneq (,$(wildcard ./src/task$(day).py))
