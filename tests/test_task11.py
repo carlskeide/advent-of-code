@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from .task11 import GameOfSeats, GameOfVectorSeats
+from src.task11 import GameOfSeats, GameOfVectorSeats
 
 
 class TestGameOfSeats(TestCase):

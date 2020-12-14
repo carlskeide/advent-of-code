@@ -1,8 +1,9 @@
 # coding=utf-8
 from unittest import TestCase
 
-from .task{{ day }} import *
+from src.task{{ day }} import *
 
 
-class TaskTests(TestCase):
-    pass
+class TestTask(TestCase):
+    def test_part1(self):
+        pass

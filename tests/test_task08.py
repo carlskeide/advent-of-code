@@ -2,7 +2,7 @@
 # coding=utf-8
 
 from unittest import TestCase
-from .task8 import GameConsole, InstructionError, OOBError, InfiniteLoopError
+from src.task08 import GameConsole, InstructionError, OOBError, InfiniteLoopError
 
 
 class TestGameConsole(TestCase):

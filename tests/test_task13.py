@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from .task13 import next_bus, bus_contest
+from src.task13 import next_bus, bus_contest
 
 
 class TestBusSchedule(TestCase):

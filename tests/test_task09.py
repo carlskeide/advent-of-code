@@ -1,10 +1,10 @@
 # coding=utf-8
 from unittest import TestCase
 
-from .task9 import validate, validate_list, find_weakness
+from src.task09 import validate, validate_list, find_weakness
 
 
-class TaskTests(TestCase):
+class TestTask(TestCase):
     data = [
         35, 20, 15, 25, 47,
         40, 62, 55, 65, 95,

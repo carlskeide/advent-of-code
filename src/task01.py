@@ -5,7 +5,7 @@ from itertools import combinations
 from math import prod
 
 
-def task1(expenses, num_items):
+def find_expences(expenses, num_items):
     for items in combinations(expenses, num_items):
         if sum(items) == 2020:
             print(f"{items} = 2020")
@@ -18,5 +18,5 @@ def task1(expenses, num_items):
 if __name__ == "__main__":
     expenses = {int(r) for r in load_input(day=1)}
 
-    print("Part 1: {}".format(task1(expenses, 2)))
-    print("Part 2: {}".format(task1(expenses, 3)))
+    print("Part 1: {}".format(find_expences(expenses, 2)))
+    print("Part 2: {}".format(find_expences(expenses, 3)))
