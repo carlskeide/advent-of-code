@@ -2,6 +2,7 @@
 from . import load_input
 
 import re
+from itertools import product
 
 
 def parse_program(input_data):
@@ -25,15 +26,22 @@ def masked_value(mask, value):
     return int(masked, 2)
 
 
-def run_program(programs):
-    memory = {}
+def masked_addr(mask, addr):
+    bin_addr = f"{addr:036b}"
+    num_wild = mask.count("X")
 
-    for program in programs:
-        mask, instructions = parse_program(program)
-        for addr, value in instructions:
-            memory[addr] = masked_value(mask, value)
+    masked = ""
+    for bit, mask_bit in zip(bin_addr, mask):
+        masked += bit if mask_bit == "0" else mask_bit
 
-    return memory
+    addr_tpl = masked.replace("X", "{}")
+
+    masked_addrs = []
+    for replacements in product("01", repeat=num_wild):
+        replaced = addr_tpl.format(*replacements)
+        masked_addrs.append(int(replaced, 2))
+
+    return masked_addrs
 
 
 if __name__ == "__main__":
@@ -47,8 +55,19 @@ if __name__ == "__main__":
 
         program.append(line)
 
-    memory = run_program(programs)
+    memory = {}
+    for program in programs:
+        mask, instructions = parse_program(program)
+        for addr, value in instructions:
+            memory[addr] = masked_value(mask, value)
+
     print(f"Part 1: {sum(memory.values())}")
 
-    part2 = ""
-    print(f"Part 2: {part2}")
+    memory = {}
+    for program in programs:
+        mask, instructions = parse_program(program)
+        for addr, value in instructions:
+            for new_addr in masked_addr(mask, addr):
+                memory[new_addr] = value
+
+    print(f"Part 2: {sum(memory.values())}")
