@@ -1,36 +1,41 @@
 # coding=utf-8
 from . import load_input
 
+from itertools import islice
 
-def memory_game(seed, limit=10):
-    memory = []
-    for i in range(limit):
-        if i < len(seed):
-            number = seed[i]
+
+def memory_game(seed):
+    last_number = number = None
+    last_turn = turn = 0
+    memory = {}
+    while True:
+        if turn < len(seed):
+            number = seed[turn]
+
+        elif last_number in memory:
+            number = last_turn - memory[last_number]
 
         else:
-            for j, n in enumerate(reversed(memory)):
-                if j == 0:
-                    last_num = n
+            number = 0
 
-                elif n == last_num:
-                    number = j
-                    break
+        yield number
 
-            else:
-                number = 0
-
-        memory.append(number)
-
-    return memory
+        memory[last_number] = last_turn
+        last_turn = turn
+        last_number = number
+        turn += 1
 
 
 if __name__ == "__main__":
     task_input = load_input(day=15)
     seed = [int(n) for n in task_input[0].split(",")]
 
-    memory = memory_game(seed, limit=2020)
-    print(f"Part 1: {memory[-1]}")
+    for number in islice(memory_game(seed), 2020):
+        pass
 
-    memory = memory_game(seed, limit=30000000)
-    print(f"Part 2: {memory[-1]}")
+    print(f"Part 1: {number}")
+
+    for number in islice(memory_game(seed), 30000000):
+        pass
+
+    print(f"Part 2: {number}")
