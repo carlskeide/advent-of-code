@@ -1,59 +1,57 @@
 # coding=utf-8
 from . import load_input
 
+from collections import defaultdict as dd
+
 
 class GameOfCubes:
-    size = 14
-
     def __init__(self, seed):
-        axis = list(range(self.size * -1, self.size + 1))
-        self.space = {
-            z: {
-                y: {
-                    x: "." for x in axis
-                } for y in axis
-            } for z in axis
-        }
+        self.space = dd(lambda: dd(lambda: dd(int)))
 
+        offset = len(seed) // 2
         for y, row in enumerate(seed):
             for x, cube in enumerate(row):
                 if cube == "#":
-                    self.space[0][y][x] = cube
+                    self.space[0][y - offset][x - offset] = 1
 
     def step(self):
-        new_space = {}
-        for z in self.space:
-            new_space[z] = {}
-            for y in self.space[z]:
-                new_space[z][y] = {}
-                for x in self.space[z][y]:
-                    if max(map(abs, (z, y, x))) == self.size:
-                        cube = "."
+        prev_space = self.space
 
-                    else:
-                        cube = self.space[z][y][x]
-                        neighbors = self.neighbors(z, y, x)
-                        if cube == "#" and neighbors not in (2, 3):
-                            cube = "."
-                        elif cube == "." and neighbors == 3:
-                            cube = "#"
+        coords = (
+            (z, y, x)
+            for z in prev_space
+            for y in prev_space[z]
+            for x in prev_space[z][y]
+        )
 
-                    new_space[z][y][x] = cube
+        expanded = {
+            (zz, yy, xx)
+            for z, y, x in coords
+            for zz in range(z - 1, z + 2)
+            for yy in range(y - 1, y + 2)
+            for xx in range(x - 1, x + 2)
+        }
 
-        self.space = new_space
+        self.space = dd(lambda: dd(lambda: dd(int)))
+        for z, y, x in expanded:
+            self.space[z][y][x] = self.calcube(prev_space, z, y, x)
 
-    def neighbors(self, z, y, x):
-        count = 0
+    def calcube(self, prev_space, z, y, x):
+        n = 0
+        cube = prev_space[z][y][x]
         for zz in range(z - 1, z + 2):
             for yy in range(y - 1, y + 2):
                 for xx in range(x - 1, x + 2):
-                    if (zz, yy, xx) == (z, y, x):
-                        continue
+                    if (zz, yy, xx) != (z, y, x):
+                        n += prev_space[zz][yy][xx]
 
-                    else:
-                        count += self.space[zz][yy][xx] == "#"
+        if cube == 1 and n not in (2, 3):
+            cube = 0
 
-        return count
+        elif cube == 0 and n == 3:
+            cube = 1
+
+        return cube
 
     def run(self, steps=6):
         for i in range(steps):
@@ -62,7 +60,7 @@ class GameOfCubes:
     @property
     def active(self):
         return sum(
-            y == "#"
+            y
             for z in self.space.values()
             for x in z.values()
             for y in x.values()
@@ -70,68 +68,56 @@ class GameOfCubes:
 
 
 class GameOfHyperCubes:
-    wzsize = 7
-    xysize = 10
-
     def __init__(self, seed):
-        xyaxis = list(range(self.xysize * -1, self.xysize + 1))
-        wzaxis = list(range(self.wzsize * -1, self.wzsize + 1))
-        self.space = {
-            w: {
-                z: {
-                    y: {
-                        x: False for x in xyaxis
-                    } for y in xyaxis
-                } for z in wzaxis
-            } for w in wzaxis
-        }
+        self.space = dd(lambda: dd(lambda: dd(lambda: dd(int))))
 
         offset = len(seed) // 2
         for y, row in enumerate(seed):
             for x, cube in enumerate(row):
                 if cube == "#":
-                    self.space[0][0][y - offset][x - offset] = True
+                    self.space[0][0][y - offset][x - offset] = 1
 
     def step(self):
-        new_space = {}
-        for w in self.space:
-            new_space[w] = {}
-            for z in self.space[w]:
-                new_space[w][z] = {}
-                for y in self.space[w][z]:
-                    new_space[w][z][y] = {}
-                    for x in self.space[w][z][y]:
-                        if max((abs(w), abs(z))) == self.wzsize:
-                            cube = False
+        prev_space = self.space
 
-                        elif max((abs(x), abs(y))) == self.xysize:
-                            cube = False
+        coords = (
+            (w, z, y, x)
+            for w in prev_space
+            for z in prev_space[w]
+            for y in prev_space[w][z]
+            for x in prev_space[w][z][y]
+        )
 
-                        else:
-                            cube = self.space[w][z][y][x]
-                            neighbors = self.neighbors(w, z, y, x)
-                            if cube and neighbors not in (2, 3):
-                                cube = False
-                            elif not cube and neighbors == 3:
-                                cube = True
+        expanded = {
+            (ww, zz, yy, xx)
+            for w, z, y, x in coords
+            for ww in range(w - 1, w + 2)
+            for zz in range(z - 1, z + 2)
+            for yy in range(y - 1, y + 2)
+            for xx in range(x - 1, x + 2)
+        }
 
-                        new_space[w][z][y][x] = cube
+        self.space = dd(lambda: dd(lambda: dd(lambda: dd(int))))
+        for w, z, y, x in expanded:
+            self.space[w][z][y][x] = self.calcube(prev_space, w, z, y, x)
 
-        self.space = new_space
-
-    def neighbors(self, w, z, y, x):
-        count = 0
+    def calcube(self, prev_space, w, z, y, x):
+        n = 0
+        cube = prev_space[w][z][y][x]
         for ww in range(w - 1, w + 2):
             for zz in range(z - 1, z + 2):
                 for yy in range(y - 1, y + 2):
                     for xx in range(x - 1, x + 2):
-                        if (ww, zz, yy, xx) == (w, z, y, x):
-                            continue
+                        if (ww, zz, yy, xx) != (w, z, y, x):
+                            n += prev_space[ww][zz][yy][xx]
 
-                        else:
-                            count += self.space[ww][zz][yy][xx]
+        if cube == 1 and n not in (2, 3):
+            cube = 0
 
-        return count
+        elif cube == 0 and n == 3:
+            cube = 1
+
+        return cube
 
     def run(self, steps=6):
         for i in range(steps):
