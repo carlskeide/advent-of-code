@@ -72,21 +72,21 @@ class TestTask(TestCase):
         }
 
         messages = [
-            "abbbbbabbbaaaababbaabbbbabababbbabbbbbbabaaaa",
+            "aaaabbaaaabbaaa",
             "bbabbbbaabaabba",
-            "babbbbaabbbbbabbbbbbaabaaabaaa",
-            "aaabbbbbbaaaabaababaabababbabaaabbababababaaa",
-            "bbbbbbbaaaabbbbaaabbabaaa",
-            "bbbababbbbaaaaaaaabbababaaababaabab",
             "ababaaaaaabaaab",
             "ababaaaaabbbaba",
-            "baabbaaaabbaaaababbaababb",
-            "abbbbabbbbaaaababbbbbbaaaababb",
             "aaaaabbaabaaaaababaa",
-            "aaaabbaaaabbaaa",
-            "aaaabbaabbaaaaaaabbbabbbaaabbaabaaa",
+            "bbbbbbbaaaabbbbaaabbabaaa",
+            "baabbaaaabbaaaababbaababb",
+            "babbbbaabbbbbabbbbbbaabaaabaaa",
+            "abbbbabbbbaaaababbbbbbaaaababb",
             "babaaabbbaaabaababbaabababaaab",
-            "aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba"
+            "bbbababbbbaaaaaaaabbababaaababaabab",
+            "aaaabbaabbaaaaaaabbbabbbaaabbaabaaa",
+            "aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba",
+            "aaabbbbbbaaaabaababaabababbabaaabbababababaaa",
+            "abbbbbabbbaaaababbaabbbbabababbbabbbbbbabaaaa"
         ]
 
         matching = (valid_message(rules, msg) for msg in messages)

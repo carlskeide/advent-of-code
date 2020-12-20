@@ -20,7 +20,10 @@ def resolve_rule(rules, rulenum):
             return resolve_rule(rules, "42") + "+"
 
         elif rulenum == "11":
-            return resolve_rule(rules, "42") + "+" + resolve_rule(rules, "31") + "+"
+            a = resolve_rule(rules, "42")
+            b = resolve_rule(rules, "31")
+            # stdlib re doesn't support recursive regex ¯\_(ツ)_/¯
+            return f"({a}{b}|{a*2}{b*2}|{a*3}{b*3}|{a*4}{b*4}|{a*5}{b*5})"
 
     elif "|" in rule:
         ors = []
@@ -52,7 +55,7 @@ if __name__ == "__main__":
     matching = (valid_message(rules, msg) for msg in messages.splitlines())
     print(f"Part 1: {sum(matching)}")
 
-    rules["8"] = "42 | 42 R"
-    rules["11"] = "42 31 | 42 R 31"
+    rules["8"] = "42 R"
+    rules["11"] = "42 R 31"
     matching = (valid_message(rules, msg) for msg in messages.splitlines())
     print(f"Part 2: {sum(matching)}")
