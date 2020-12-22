@@ -23,14 +23,12 @@ def score(deck):
     )
 
 
-def recursive_combat(deck1, deck2, depth=1):
+def recursive_combat(deck1, deck2):
     cache = []
 
-    print(f"starting game #{depth}")
     while deck1 and deck2:
         signature = (tuple(deck1), tuple(deck2))
         if signature in cache:
-            print("infinite loop!")
             return (deck1, [])
 
         else:
@@ -41,8 +39,7 @@ def recursive_combat(deck1, deck2, depth=1):
         # print(f"{card1} vs {card2}")
 
         if len(deck1) >= card1 and len(deck2) >= card2:
-            print("subgame")
-            result = recursive_combat(deck1[:], deck2[:], depth=depth + 1)
+            result = recursive_combat(deck1[:card1], deck2[:card2])
             if result[0]:
                 deck1.extend((card1, card2))
 
@@ -55,7 +52,6 @@ def recursive_combat(deck1, deck2, depth=1):
         else:
             deck2.extend((card2, card1))
 
-    print(f"ending game #{depth}")
     return (deck1, deck2)
 
 
@@ -69,4 +65,4 @@ if __name__ == "__main__":
     # print(f"Part 1: {score(result)}")
 
     result = recursive_combat(deck1, deck2)
-    print(f"Part 2: {result}")
+    print(f"Part 2: {score(max(result))}")
