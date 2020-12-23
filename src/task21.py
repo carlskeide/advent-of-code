@@ -4,7 +4,6 @@ from . import load_input
 import re
 from collections import defaultdict
 from functools import reduce
-from pprint import pprint
 
 
 def unsafe_ingredients(charter):
@@ -29,7 +28,7 @@ if __name__ == "__main__":
 
     unsafe = unsafe_ingredients(charter)
     unsafe_items = reduce(set.union, unsafe.values())
-    pprint(unsafe)
+
     ingredients = []
     for items, _ in charter:
         ingredients.extend(item for item in items if item not in unsafe_items)

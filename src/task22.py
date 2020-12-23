@@ -61,8 +61,8 @@ if __name__ == "__main__":
         [int(card) for card in deck.splitlines()[1:]] for deck in task_input
     ]
 
-    # result = combat(deck1[:], deck2[:])
-    # print(f"Part 1: {score(result)}")
+    result = combat(deck1[:], deck2[:])
+    print(f"Part 1: {score(result)}")
 
-    result = recursive_combat(deck1, deck2)
+    result = recursive_combat(deck1[:], deck2[:])
     print(f"Part 2: {score(max(result))}")
