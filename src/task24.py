@@ -5,9 +5,9 @@ import re
 from collections import defaultdict
 
 DIRECTIONS = {
-    "nw": (0, -1, 1), "ne": (1, -1, 0),
-    "w": (-1, 0, 1), "e": (1, 0, -1),
-    "sw": (-1, 1, 0), "se": (0, 1, -1)
+    "nw": (-1, 1), "ne": (0, 1),
+    "w": (-1, 0), "e": (1, 0),
+    "sw": (0, -1), "se": (1, -1)
 }
 
 
@@ -16,15 +16,15 @@ def parse_steps(instructions):
 
 
 def traverse(floor, steps):
-    x = y = z = 0
-    for dx, dy, dz in (DIRECTIONS[step] for step in steps):
-        x, y, z = x + dx, y + dy, z + dz
+    x = y = 0
+    for dx, dy in (DIRECTIONS[step] for step in steps):
+        x, y = x + dx, y + dy
 
-    floor[(x, y, z)] = not floor[(x, y, z)]
+    floor[(x, y)] = not floor[(x, y)]
 
 
-def neighbors(x, y, z):
-    return (((x + dx, y + dy, z + dz) for dx, dy, dz in DIRECTIONS.values()))
+def neighbors(x, y):
+    return (((x + dx, y + dy) for dx, dy in DIRECTIONS.values()))
 
 
 def flip(floor):
