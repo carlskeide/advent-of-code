@@ -1,11 +1,11 @@
 # coding=utf-8
 from pathlib import Path
 
-PROJECT_DIR = Path(__file__).resolve().parent.parent
+PROJECT_DIR = Path(__file__).resolve().parent
 
 
 def load_input(day, group_lines=False):
-    input_file = PROJECT_DIR / "resources" / f"task{day:02d}.input"
+    input_file = PROJECT_DIR / f"task{day:02d}.input"
     with input_file.open('r') as f:
         content = f.read()
 

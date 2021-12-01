@@ -14,8 +14,8 @@ ifneq (,$(wildcard ./${year}/task${d}.py))
 	# Day exists
 else
 	sed -e 's/{{ day }}/${d}/g' task.tpl > "${year}/task${d}.py"
-	sed -e 's/{{ day }}/${d}/g' test_task.tpl > "${year}/task${d}_test.py"
-	touch "resources/task${d}.input"
+	sed -e 's/{{ day }}/${day}/g' test_task.tpl > "${year}/task${d}_test.py"
+	touch "${year}/task${d}.input"
 endif
 
 run:
