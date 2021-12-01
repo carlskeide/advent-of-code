@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task02 import policy_num_letter, policy_letter_pos
+from .task02 import policy_num_letter, policy_letter_pos
 
 
 class TestTask(TestCase):

@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task01 import find_expences
+from .task01 import find_expences
 
 
 class TestTask(TestCase):

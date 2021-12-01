@@ -1,5 +1,6 @@
 .DEFAULT_GOAL := new
 
+year := $(shell date "+%-0Y")
 month := $(shell date "+%-0m")
 ifeq ($(month), 12)
 	day ?= $(shell date "+%-d")
@@ -9,16 +10,16 @@ endif
 d = $(shell printf "%02d" ${day})
 
 new:
-ifneq (,$(wildcard ./src/task${d}.py))
+ifneq (,$(wildcard ./${year}/task${d}.py))
 	# Day exists
 else
-	sed -e 's/{{ day }}/${d}/g' task.tpl > "src/task${d}.py"
-	sed -e 's/{{ day }}/${d}/g' test_task.tpl > "tests/test_task${d}.py"
+	sed -e 's/{{ day }}/${d}/g' task.tpl > "${year}/task${d}.py"
+	sed -e 's/{{ day }}/${d}/g' test_task.tpl > "${year}/task${d}_test.py"
 	touch "resources/task${d}.input"
 endif
 
 run:
-	time python3 -m "src.task${d}"
+	time python3 -m "${year}.task${d}"
 
 test:
-	python -m unittest -v "tests.test_task${d}"
+	python -m unittest -v "${year}.task${d}_test"

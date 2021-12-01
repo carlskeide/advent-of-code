@@ -2,7 +2,7 @@
 from unittest import TestCase
 
 from collections import Counter
-from src.task10 import jolt_differences, valid_arrangements
+from .task10 import jolt_differences, valid_arrangements
 
 
 class TestTask(TestCase):

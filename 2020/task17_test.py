@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task17 import GameOfCubes
+from .task17 import GameOfCubes
 
 
 class TestGameOfCubes(TestCase):

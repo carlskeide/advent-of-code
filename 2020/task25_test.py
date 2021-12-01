@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task25 import transform, find_loop_size
+from .task25 import transform, find_loop_size
 
 
 class TestCrypto(TestCase):

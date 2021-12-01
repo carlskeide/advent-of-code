@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task22 import combat, recursive_combat, score
+from .task22 import combat, recursive_combat, score
 
 
 class TestTask(TestCase):

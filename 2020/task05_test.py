@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task05 import decode, seat_id
+from .task05 import decode, seat_id
 
 
 class TestTask(TestCase):

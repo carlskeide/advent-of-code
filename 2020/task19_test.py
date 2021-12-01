@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task19 import valid_message
+from .task19 import valid_message
 
 
 class TestTask(TestCase):

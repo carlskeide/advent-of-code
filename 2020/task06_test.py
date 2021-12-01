@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task06 import distinct_answers, common_answers
+from .task06 import distinct_answers, common_answers
 
 
 class TestTask(TestCase):

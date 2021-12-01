@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task04 import validate_fields, validate_strict, validators
+from .task04 import validate_fields, validate_strict, validators
 
 
 class TestTask(TestCase):

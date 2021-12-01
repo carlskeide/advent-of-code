@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task09 import validate, validate_list, find_weakness
+from .task09 import validate, validate_list, find_weakness
 
 
 class TestTask(TestCase):

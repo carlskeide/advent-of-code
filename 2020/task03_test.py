@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task03 import toboggan
+from .task03 import toboggan
 
 
 class TestTask(TestCase):

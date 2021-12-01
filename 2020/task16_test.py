@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task16 import invalid_fields, match_rules
+from .task16 import invalid_fields, match_rules
 
 
 class TestTask(TestCase):

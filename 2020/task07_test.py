@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task07 import Bag
+from .task07 import Bag
 
 
 class TestTask(TestCase):

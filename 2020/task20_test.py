@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task20 import Tile
+from .task20 import Tile
 
 
 class TestTiles(TestCase):

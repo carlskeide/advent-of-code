@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task12 import Navigator, WaypointNavigator
+from .task12 import Navigator, WaypointNavigator
 
 
 class TestNavigator(TestCase):

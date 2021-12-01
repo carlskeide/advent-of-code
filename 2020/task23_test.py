@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task23 import Ring
+from .task23 import Ring
 
 
 class TestRing(TestCase):

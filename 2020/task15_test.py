@@ -2,7 +2,7 @@
 from unittest import TestCase
 from itertools import islice
 
-from src.task15 import memory_game
+from .task15 import memory_game
 
 
 class TestTask(TestCase):

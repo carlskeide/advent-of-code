@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task14 import parse_program, masked_value, masked_addr
+from .task14 import parse_program, masked_value, masked_addr
 
 
 class TestTask(TestCase):

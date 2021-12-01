@@ -1,7 +1,7 @@
 # coding=utf-8
 from unittest import TestCase
 
-from src.task18 import ltr_maths, parenthezise
+from .task18 import ltr_maths, parenthezise
 
 
 class TestTask(TestCase):
