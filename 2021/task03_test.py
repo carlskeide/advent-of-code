@@ -1,11 +1,11 @@
 # coding=utf-8
 from unittest import TestCase
 
-from .task03 import get_gamma, to_epsilon
+from .task03 import get_gamma, to_epsilon, filter_common
 
 
 class TestTask(TestCase):
-    code = [
+    codes = [
         "00100",
         "11110",
         "10110",
@@ -21,10 +21,14 @@ class TestTask(TestCase):
     ]
 
     def test_part1(self):
-        gamma = get_gamma(self.code)
+        gamma = get_gamma(self.codes)
         self.assertEqual(gamma, "10110")
         self.assertEqual(int(gamma, 2), 22)
 
         epsilon = to_epsilon(gamma)
         self.assertEqual(epsilon, "01001")
         self.assertEqual(int(epsilon, 2), 9)
+
+    def test_filter_common(self):
+        self.assertEqual(filter_common(self.codes), "10111")
+        self.assertEqual(filter_common(self.codes, invert=True), "01010")
