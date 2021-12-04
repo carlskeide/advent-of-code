@@ -40,6 +40,15 @@ BINGO_BOARD = [
     ['', '', '12', '3', '']
 ]
 
+LAST_BOARD = [
+    ['3', '15', '', '', '22'],
+    ['', '18', '', '', ''],
+    ['19', '8', '', '25', ''],
+    ['20', '', '', '', ''],
+    ['', '', '', '12', '6']
+]
+
+
 class TestTask(TestCase):
     def test_parse_boards(self):
         board_input = [
@@ -85,6 +94,7 @@ class TestTask(TestCase):
 
     def test_board_value(self):
         self.assertEqual(board_value(BINGO_BOARD), 188)
+        self.assertEqual(board_value(LAST_BOARD), 148)
 
     def test_part1(self):
         board, number = play_bingo(TEST_BOARDS, TEST_NUMBERS)
@@ -93,4 +103,6 @@ class TestTask(TestCase):
 
 
     def test_part2(self):
-        pass
+        board, number = play_bingo(TEST_BOARDS, TEST_NUMBERS, win=False)
+        self.assertEqual(number, "13")
+        self.assertEqual(board, LAST_BOARD)
