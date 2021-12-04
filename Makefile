@@ -19,7 +19,7 @@ else
 endif
 
 run:
-	time python3 -m "${year}.task${d}"
+	time python3 -m "${year}.${f}"
 
 test:
-	python -m unittest -v "${year}.task${d}_test"
+	python -m unittest -v "${year}.${f}_test"
