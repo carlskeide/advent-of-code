@@ -1,6 +1,7 @@
 # coding=utf-8
 from . import load_input
 
+
 def parse_boards(charter):
     return [
         [row.split() for row in board.splitlines()]
@@ -9,16 +10,29 @@ def parse_boards(charter):
 
 
 def has_bingo(board):
-    cols = [[board[y][x] for y in range(5)] for x in range(5)]
-    return any(all(c == "" for c in row) for row in board + cols)
+    cols = [
+        [board[y][x] for y in range(5)]
+        for x in range(5)
+    ]
+
+    return any(
+        all(c == "" for c in row)
+        for row in board + cols
+    )
 
 
 def score_board(board, number):
-    return [["" if c == number else c for c in row] for row in board]
+    return [
+        ["" if c == number else c for c in row]
+        for row in board
+    ]
 
 
 def board_value(board):
-    return sum(sum(int(col) for col in row if col) for row in board)
+    return sum(
+        sum(int(col) for col in row if col)
+        for row in board
+    )
 
 
 def play_bingo(boards, numbers, win=True):
@@ -35,9 +49,6 @@ def play_bingo(boards, numbers, win=True):
                 if win or len(bingo_boards) == len(boards):
                     print("Game over")
                     return board, number
-
-    print(f"last board to bingo was: {bingo_boards[-1]}")
-    return boards[bingo_boards[-1]], number
 
 
 if __name__ == "__main__":
