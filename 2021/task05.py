@@ -1,21 +1,30 @@
 # coding=utf-8
-from itertools import chain
+from itertools import chain, repeat
 from collections import Counter
 from . import load_input
 
-def make_line(text):
-    pos1, pos2 = text.split("->")
-    x1, y1, x2, y2 = map(int, pos1.split(",") + pos2.split(","))
-    if y1 == y2:
-        start, stop = sorted([x1, x2])
-        return (f"{x},{y1}" for x in range(start, stop + 1))
 
-    if x1 == x2:
-        start, stop = sorted([y1, y2])
-        return (f"{x1},{y}" for y in range(start, stop + 1))
+def make_range(start, stop):
+    if start < stop:
+        return range(start, stop + 1)
+
+    elif start > stop:
+        return range(start, stop - 1, -1)
 
     else:
-        return None
+        return repeat(start)
+
+
+def make_lines(charter, diagonals=False):
+    for text in charter:
+        pos1, pos2 = text.split("->")
+        x1, y1, x2, y2 = map(int, pos1.split(",") + pos2.split(","))
+        if (x1 != x2 and y1 != y2) and not diagonals:
+            continue
+
+        yield list(f"{x},{y}" for x, y in zip(make_range(x1, x2),
+                                              make_range(y1, y2)))
+
 
 
 def overlap(lines):
@@ -25,9 +34,11 @@ def overlap(lines):
 
 if __name__ == "__main__":
     task_input = load_input(day=5, group_lines=False)
-    straight_lines = filter(None, map(make_line, task_input))
+
+    straight_lines = make_lines(task_input)
     part1 = overlap(straight_lines)
     print(f"Part 1: {part1}")
 
-    part2 = ""
+    all_lines = make_lines(task_input, diagonals=True)
+    part2 = overlap(all_lines)
     print(f"Part 2: {part2}")
