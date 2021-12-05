@@ -19,7 +19,7 @@ else
 endif
 
 run:
-	time python3 -m "${year}.${f}"
+	/usr/bin/time -f'Time: %E' -- python3 -m "${year}.${f}"
 
 test:
 	python -m unittest -v "${year}.${f}_test"
