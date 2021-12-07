@@ -1,5 +1,5 @@
 # coding=utf-8
-from statistics import median
+from statistics import median, mean
 from . import load_input
 
 
@@ -18,8 +18,5 @@ if __name__ == "__main__":
     part1 = linear_fuel(crabs, median(crabs))
     print(f"Part 1: {part1}")
 
-    part2 = min(
-        exponential_fuel(crabs, pos)
-        for pos in range(min(crabs), max(crabs) + 1)
-    )
+    part2 = exponential_fuel(crabs, int(mean(crabs)))
     print(f"Part 2: {part2}")
