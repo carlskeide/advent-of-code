@@ -12,15 +12,20 @@ TEST_MAP = [
 ]
 
 
-class TestTask(TestCase):
-    def test_make_map(self):
-        heightmap = make_map(TEST_MAP)
-        self.assertEqual(len(heightmap), 5)
-        self.assertListEqual(heightmap[2], [9, 8, 5, 6, 7, 8, 9, 8, 9, 2])
+class TestHeightMap(TestCase):
+    def setUp(self):
+        self.heightmap = HeightMap(TEST_MAP)
 
-    def test_part1(self):
-        heightmap = make_map(TEST_MAP)
-        self.assertEqual(list(find_lows(heightmap)), [1, 0, 5, 5])
+    def test_init(self):
+        self.assertDictEqual(self.heightmap.size, {"x": 10, "y": 5})
+        self.assertListEqual(
+            self.heightmap.map[2],
+            [9, 8, 5, 6, 7, 8, 9, 8, 9, 2])
 
-    def test_part2(self):
-        pass
+    def test_find_lows(self):
+        self.assertEqual(list(self.heightmap.find_lows()), [1, 0, 5, 5])
+
+    def test_find_basins(self):
+        self.assertListEqual(
+            [len(basin) for basin in self.heightmap.find_basins()],
+            [3, 9, 14, 9])
