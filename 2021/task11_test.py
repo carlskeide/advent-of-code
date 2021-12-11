@@ -39,4 +39,6 @@ class TestTask(TestCase):
         )
 
     def test_part2(self):
-        pass
+        cave = GameOfSquids(TEST_STATE)
+        cave.run_until_synchronized()
+        self.assertEqual(cave.steps, 195)

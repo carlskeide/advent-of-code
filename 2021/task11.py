@@ -6,6 +6,7 @@ class GameOfSquids(object):
     def __init__(self, charter):
         self.state = [[int(c) for c in line] for line in charter]
         self.size = len(self.state)
+        self.steps = 0
         self.flashes = 0
 
     def __iter__(self):
@@ -50,6 +51,11 @@ class GameOfSquids(object):
         for position in flashed:
             self[position] = 0
 
+        self.steps += 1
+
+    def run_until_synchronized(self):
+        while sum(sum(line) for line in self.state):
+            self.step()
 
 if __name__ == "__main__":
     task_input = load_input(day=11, group_lines=False)
@@ -60,5 +66,7 @@ if __name__ == "__main__":
     part1 = cave.flashes
     print(f"Part 1: {part1}")
 
-    part2 = ""
+    new_cave = GameOfSquids(task_input)
+    new_cave.run_until_synchronized()
+    part2 = new_cave.steps
     print(f"Part 2: {part2}")
