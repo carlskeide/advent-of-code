@@ -12,22 +12,20 @@ class Cave:
             self.nodes[b].add(a)
 
     def find_paths(self):
-        paths = []
-        self.spelunk("start", [], paths)
-        return paths
+        return list(self.spelunk(trail=[], node="start"))
 
     def valid_path(self, trail, node):
         return (node != "start" and not (node.islower() and node in trail))
 
-    def spelunk(self, node, trail, paths):
+    def spelunk(self, trail, node):
         path = trail + [node]
-        for conn in self.nodes[node]:
-            if conn == "end":
-                # print(f"found path {'-'.join(path)} -> {conn}")
-                paths.append(path + ["end"])
+        for next_node in self.nodes[node]:
+            if next_node == "end":
+                # print(f"found path {'-'.join(path)} -> {next_node}")
+                yield path + [next_node]
 
-            elif self.valid_path(path, conn):
-                self.spelunk(conn, path, paths)
+            elif self.valid_path(path, next_node):
+                yield from self.spelunk(path, next_node)
 
 
 class DoubleDipCave(Cave):
