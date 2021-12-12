@@ -1,7 +1,7 @@
 # coding=utf-8
 from . import load_input
 
-from collections import defaultdict, Counter
+from collections import defaultdict
 
 
 class Cave:
@@ -23,11 +23,24 @@ class Cave:
         path = trail + [node]
         for conn in self.nodes[node]:
             if conn == "end":
-                # print(f"found path {'-'.join(trail)} -> {conn}")
+                # print(f"found path {'-'.join(path)} -> {conn}")
                 paths.append(path + ["end"])
 
-            elif self.valid_path(trail, conn):
+            elif self.valid_path(path, conn):
                 self.spelunk(conn, path, paths)
+
+
+class DoubleDipCave(Cave):
+    def valid_path(self, trail, node):
+        if node == "start":
+            return False
+
+        elif node.islower() and node in trail:
+            small_nodes = list(filter(str.islower, trail))
+            return len(small_nodes) == len(set(small_nodes))
+
+        else:
+            return True
 
 
 if __name__ == "__main__":
@@ -36,5 +49,5 @@ if __name__ == "__main__":
     paths = Cave(task_input).find_paths()
     print(f"Part 1: {len(paths)}")
 
-    paths = ""
+    paths = DoubleDipCave(task_input).find_paths()
     print(f"Part 2: {len(paths)}")

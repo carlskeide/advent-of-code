@@ -71,4 +71,12 @@ class TestTask(TestCase):
         self.assertEqual(len(cave.find_paths()), 226)
 
     def test_part2(self):
-        pass
+        cave = DoubleDipCave(TEST_CAVES[0])
+        self.assertEqual(len(cave.find_paths()), 36)
+
+        cave = DoubleDipCave(TEST_CAVES[1])
+        self.assertEqual(len(cave.find_paths()), 103)
+
+        cave = DoubleDipCave(TEST_CAVES[2])
+        self.assertEqual(len(cave.find_paths()), 3509)
+
