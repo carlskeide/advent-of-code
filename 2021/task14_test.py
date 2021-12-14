@@ -24,17 +24,11 @@ TEST_RULES = [
 
 
 class TestTask(TestCase):
-    def test_part1(self):
+    def test_polymerize(self):
         polymer = Polymer("NNCB", TEST_RULES)
-        polymer.step()
-        self.assertEqual(str(polymer), "NCNBCHB")
-        polymer.step()
-        self.assertEqual(str(polymer), "NBCCNBBBCBHCB")
-        polymer.step()
-        self.assertEqual(str(polymer), "NBBBCNCCNBBNBNBBCHBHHBCHB")
-        polymer.step()
-        self.assertEqual(str(polymer),
-                         "NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB")
-
-    def test_part2(self):
-        pass
+        counts = polymer.polymerize(10)
+        self.assertEqual(sum(counts.values()), 3073)
+        self.assertEqual(counts["B"], 1749)
+        self.assertEqual(counts["C"], 298)
+        self.assertEqual(counts["H"], 161)
+        self.assertEqual(counts["N"], 865)

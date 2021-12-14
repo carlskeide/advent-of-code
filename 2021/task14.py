@@ -1,11 +1,21 @@
 # coding=utf-8
+from itertools import tee
 from collections import Counter
+from functools import lru_cache
+
 from . import load_input
+
+
+def pairwise(iterable):
+    """ Included in python >= 3.10 """
+    a, b = tee(iterable)
+    next(b, None)
+    return zip(a, b)
 
 
 class Polymer:
     def __init__(self, seed, rules):
-        self.state = list(seed)
+        self.state = tuple(seed)
         self.rules = {
             tuple(pair): insert
             for pair, insert in (
@@ -13,30 +23,40 @@ class Polymer:
             )
         }
 
-    def __str__(self):
-        return "".join(self.state)
+    def polymerize(self, steps=1):
+        counts = Counter()
+        for a, b in pairwise(self.state):
+            counts.update(self._expand(a, b, depth=steps))
 
-    def step(self):
-        new_state = []
-        for a, b in (self.state[i:i + 2] for i in range(len(self.state) - 1)):
-            new_state.append(a)
-            if (a, b) in self.rules:
-                new_state.append(self.rules[(a, b)])
+        counts.update(b)
+        return counts
 
-        new_state.append(b)
+    @lru_cache(maxsize=None)
+    def _expand(self, a, b, depth):
+        depth -= 1
 
-        self.state = new_state
+        counts = Counter()
+        if not depth:
+            counts.update(a)
 
+        if (a, b) in self.rules:
+            new = self.rules[(a, b)]
+
+            if not depth:
+                counts.update(new)
+
+            else:
+                counts.update(self._expand(a, new, depth))
+                counts.update(self._expand(new, b, depth))
+
+        return counts
 
 if __name__ == "__main__":
     seed, rules = load_input(day=14, group_lines=True)
     polymer = Polymer(seed, rules.splitlines())
 
-    for _ in range(10):
-        polymer.step()
-
-    count = Counter(polymer.state).most_common()
+    count = polymer.polymerize(10).most_common()
     print(f"Part 1: {count[0][1] - count[-1][1]}")
 
-    part2 = ""
-    print(f"Part 2: {part2}")
+    count = polymer.polymerize(40).most_common()
+    print(f"Part 2: {count[0][1] - count[-1][1]}")
