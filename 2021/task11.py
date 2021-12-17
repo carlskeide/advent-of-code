@@ -1,36 +1,14 @@
 # coding=utf-8
-from . import load_input
+from .utils import load_input
+from .models import DiagonalGrid
 
 
-class GameOfSquids(object):
+class GameOfSquids(DiagonalGrid):
     def __init__(self, charter):
-        self.state = [[int(c) for c in line] for line in charter]
-        self.size = len(self.state)
+        super().__init__(map(int, line) for line in charter)
+
         self.steps = 0
         self.flashes = 0
-
-    def __iter__(self):
-        for y in range(self.size):
-            for x in range(self.size):
-                yield (x, y)
-
-    def __getitem__(self, position):
-        x, y = position
-        return self.state[y][x]
-
-    def __setitem__(self, position, value):
-        x, y = position
-        self.state[y][x] = value
-
-    def neighbors(self, position):
-        x, y = position
-        for xx, yy in (
-            (x - 1, y - 1), (x, y - 1), (x + 1, y - 1),
-            (x - 1, y), (x + 1, y),
-            (x - 1, y + 1), (x, y + 1), (x + 1, y + 1)
-        ):
-            if (0 <= xx < self.size and 0 <= yy < self.size):
-                yield (xx, yy)
 
     def step(self):
         for position in self:

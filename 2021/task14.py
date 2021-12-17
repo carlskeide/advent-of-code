@@ -1,16 +1,8 @@
 # coding=utf-8
-from itertools import tee
 from collections import Counter
 from functools import lru_cache
 
-from . import load_input
-
-
-def pairwise(iterable):
-    """ Included in python >= 3.10 """
-    a, b = tee(iterable)
-    next(b, None)
-    return zip(a, b)
+from .utils import load_input, pairwise
 
 
 class Polymer:

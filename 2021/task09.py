@@ -1,32 +1,14 @@
 # coding=utf-8
-from . import load_input
 from functools import reduce
 from operator import mul
 
+from .utils import load_input
+from .models import CardinalGrid
 
-class HeightMap:
+
+class HeightMap(CardinalGrid):
     def __init__(self, charter):
-        self.map = [list(map(int, s)) for s in charter]
-
-        self.size = {
-            "x": len(self.map[0]),
-            "y": len(self.map)
-        }
-
-    def __iter__(self):
-        for y in range(self.size["y"]):
-            for x in range(self.size["x"]):
-                yield (x, y)
-
-    def __getitem__(self, position):
-        x, y = position
-        return self.map[y][x]
-
-    def neighbors(self, position):
-        x, y = position
-        for xx, yy in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
-            if (0 <= xx < self.size["x"] and 0 <= yy < self.size["y"]):
-                yield (xx, yy)
+        super().__init__(map(int, line) for line in charter)
 
     def find_lows(self):
         for position in self:

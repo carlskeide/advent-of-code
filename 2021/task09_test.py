@@ -19,7 +19,7 @@ class TestHeightMap(TestCase):
     def test_init(self):
         self.assertDictEqual(self.heightmap.size, {"x": 10, "y": 5})
         self.assertListEqual(
-            self.heightmap.map[2],
+            self.heightmap.state[2],
             [9, 8, 5, 6, 7, 8, 9, 8, 9, 2])
 
     def test_find_lows(self):

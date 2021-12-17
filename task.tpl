@@ -1,5 +1,5 @@
 # coding=utf-8
-from . import load_input
+from .utils import load_input
 
 
 if __name__ == "__main__":
