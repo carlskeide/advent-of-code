@@ -1,6 +1,17 @@
 # coding=utf-8
+import operator
+from functools import reduce
 from .utils import load_input
 
+OPCODES = {
+    0: sum,
+    1: lambda x: reduce(operator.mul, x),
+    2: min,
+    3: max,
+    5: lambda x: int(x[0] > x[1]),
+    6: lambda x: int(x[0] < x[1]),
+    7: lambda x: int(x[0] == x[1]),
+}
 
 def parse_packet(packet):
     parsed = {
@@ -63,12 +74,18 @@ def sum_versions(parsed):
         )
 
 
+def execute(obj):
+    if obj["type"] == 4:
+        return obj["value"]
+    else:
+        values = [execute(child) for child in obj["value"]]
+        return OPCODES[obj["type"]](values)
+
+
 if __name__ == "__main__":
     task_input = load_input(day=16, group_lines=False)
     packet = bin(int(task_input[0], 16))[2:]
 
-    i, parsed = parse_packet(packet)
+    _, parsed = parse_packet(packet)
     print(f"Part 1: {sum_versions(parsed)}")
-
-    part2 = ""
-    print(f"Part 2: {part2}")
+    print(f"Part 2: {execute(parsed)}")
