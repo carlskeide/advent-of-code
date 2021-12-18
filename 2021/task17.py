@@ -7,40 +7,51 @@ from .utils import load_input
 def parse_target(description):
     matched = re.match(r"^.*x=(\d+)..(\d+), y=(\-?\d+)..(\-?\d+)", description)
     x_min, x_max, y_max, y_min = map(int, matched.groups())
-    return ((x_min, y_min), (x_max, y_max))
+    return x_min, x_max, y_min, y_max
 
 
-class BallisticGrid(object):
-    def __init__(self, target):
-        super().__init__()
+def launch_probe(x_delta, y_delta):
+    x = y = 0
+    while True:
+        x += x_delta
+        y += y_delta
 
-        self.origin = (0, 0)
-        self[0, 0] = "S"
+        yield (x, y)
 
-        self.target = target
-        for target_position in self[target[0]:target[1]]:
-            self[target_position] = "T"
+        x_delta -= (x_delta > 0)
+        y_delta -= 1
 
-    def __str__(self):
-        return "\n".join(
-            "".join(
-                self.get((x, y), ".")
-                for x in range(self.size["x"] + 1)
-            ) for y in range(self.size["y"] + 1)
-        )
 
-    @property
-    def size(self):
-        return {
-            "x": max(x for x, y in self),
-            "y": max(y for x, y in self)
-        }
+def max_height(target):
+    x_min, x_max, y_min, y_max = target
+    valid = []
+
+    for x_delta in range(1,100):
+        for y_delta in range(1,3000):
+            # print(f"Launching with {(x_delta, y_delta)}", end=" ")
+
+            trajectory = []
+            for x, y in launch_probe(x_delta, y_delta):
+                trajectory.append((x, y))
+                if x_min <= x <= x_max and y_min >= y >= y_max:
+                    print(f"{(x_delta, y_delta)} Hit! max_y: {max(y for _, y in trajectory)}")
+                    valid.append(trajectory)
+                    break
+
+                elif x > x_max or y < y_max:
+                    # print(f"Miss! {trajectory}")
+                    break
+
+    if not valid:
+        raise Exception("No shots hit")
+
+    return max(max(y for _, y in trajectory) for trajectory in valid)
 
 
 if __name__ == "__main__":
-    task_input = load_input(day=17, group_lines=False)
+    target_spec, *_ = load_input(day=17, group_lines=False)
 
-    part1 = ""
+    part1 = max_height(parse_target(target_spec))
     print(f"Part 1: {part1}")
 
     part2 = ""
