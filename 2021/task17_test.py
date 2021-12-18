@@ -12,3 +12,6 @@ class TestTask(TestCase):
 
     def test_max_height(self):
         self.assertEqual(max_height((20, 30, -5, -10)), 45)
+
+    def test_distinct_deltas(self):
+        self.assertEqual(distinct_deltas((20, 30, -5, -10)), 112)

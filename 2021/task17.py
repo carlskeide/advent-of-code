@@ -22,37 +22,39 @@ def launch_probe(x_delta, y_delta):
         y_delta -= 1
 
 
-def max_height(target):
+def find_trajectories(target, x_iter, y_iter):
     x_min, x_max, y_min, y_max = target
-    valid = []
-
-    for x_delta in range(1,100):
-        for y_delta in range(1,3000):
-            # print(f"Launching with {(x_delta, y_delta)}", end=" ")
-
+    for x_delta in x_iter:
+        for y_delta in y_iter:
             trajectory = []
             for x, y in launch_probe(x_delta, y_delta):
                 trajectory.append((x, y))
                 if x_min <= x <= x_max and y_min >= y >= y_max:
-                    print(f"{(x_delta, y_delta)} Hit! max_y: {max(y for _, y in trajectory)}")
-                    valid.append(trajectory)
+                    # print(f"{(x_delta, y_delta)} Hit!")
+                    yield ((x_delta, y_delta), trajectory)
                     break
 
                 elif x > x_max or y < y_max:
-                    # print(f"Miss! {trajectory}")
+                    # print(f"{(x_delta, y_delta)} Miss!")
                     break
 
-    if not valid:
-        raise Exception("No shots hit")
 
-    return max(max(y for _, y in trajectory) for trajectory in valid)
+def max_height(target):
+    trajectories = find_trajectories(target, range(1, 50), range(1, 500))
+    return max(max(y for _, y in trajectory) for _, trajectory in trajectories)
+
+
+def distinct_deltas(target):
+    trajectories = find_trajectories(target, range(1, 255), range(-255, 255))
+    return sum(1 for _ in trajectories)
 
 
 if __name__ == "__main__":
     target_spec, *_ = load_input(day=17, group_lines=False)
+    target = parse_target(target_spec)
 
-    part1 = max_height(parse_target(target_spec))
+    part1 = max_height(target)
     print(f"Part 1: {part1}")
 
-    part2 = ""
+    part2 = distinct_deltas(target)
     print(f"Part 2: {part2}")
