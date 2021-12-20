@@ -1,9 +1,9 @@
 # coding=utf-8
 from .utils import load_input
-from .models import CardinalGrid
+from .models import SimpleGrid
 
 
-class DangerCave(CardinalGrid):
+class DangerCave(SimpleGrid):
     def __init__(self, charter):
         super().__init__(map(int, line) for line in charter)
         self[0,0] = 0  # First square is free

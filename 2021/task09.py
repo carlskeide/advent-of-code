@@ -3,10 +3,10 @@ from functools import reduce
 from operator import mul
 
 from .utils import load_input
-from .models import CardinalGrid
+from .models import SimpleGrid
 
 
-class HeightMap(CardinalGrid):
+class HeightMap(SimpleGrid):
     def __init__(self, charter):
         super().__init__(map(int, line) for line in charter)
 

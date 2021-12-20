@@ -1,9 +1,9 @@
 # coding=utf-8
 from .utils import load_input
-from .models import DiagonalGrid
+from .models import SimpleGrid, DiagonalMixin
 
 
-class GameOfSquids(DiagonalGrid):
+class GameOfSquids(DiagonalMixin, SimpleGrid):
     def __init__(self, charter):
         super().__init__(map(int, line) for line in charter)
 

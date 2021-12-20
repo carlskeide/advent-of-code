@@ -1,39 +1,32 @@
 # coding=utf-8
 import re
-from . import load_input
+from .utils import load_input
+from .models import SparseGrid
 
 
-class FoldableGrid:
+class FoldableGrid(SparseGrid):
     def __init__(self, dots):
-        self.dots = {
-            tuple(int(s) for s in dot.split(',')) for dot in dots
-        }
+        super().__init__({
+            tuple(int(s) for s in dot.split(',')): "#" for dot in dots
+        })
 
     def __str__(self):
-        max_x = max(x for x, y in self.dots)
-        max_y = max(y for x, y in self.dots)
-
-        return "\n".join(
-            "".join(
-                "#" if (x, y) in self.dots else " "
-                for x in range(max_x + 1)
-            ) for y in range(max_y + 1)
-        )
+        return "\n".join(reversed(super().__str__().splitlines()))
 
     def fold(self, where):
         axis, pos = where.split('=')
         pos = int(pos)
-        new_dots = set()
-        for dot in self.dots:
+        new_state = {}
+        for dot in self:
             x, y = dot
             if axis == "x" and x > pos:
                 dot = (pos - (x - pos), y)
             elif axis == "y" and y > pos:
                 dot = (x, pos - (y - pos))
 
-            new_dots.add(dot)
+            new_state[dot] = "#"
 
-        self.dots = new_dots
+        self.state = new_state
 
 
 if __name__ == "__main__":
@@ -42,7 +35,7 @@ if __name__ == "__main__":
 
     paper = FoldableGrid(dots.splitlines())
     paper.fold(folds[0])
-    print(f"Part 1: {len(paper.dots)}")
+    print(f"Part 1: {len(paper.values())}")
 
     for s in folds[1:]:
         paper.fold(s)

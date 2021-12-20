@@ -1,14 +1,19 @@
 # coding=utf-8
-from typing import Tuple, Iterable, Iterator, Any
+from typing import Tuple, Dict, Iterable, Iterator, Optional, Any
 
 Position = Tuple[int, int]
 
+CARDINAL_NEIGHBORS = (
+    (-1, 0), (1, 0), (0, -1), (0, 1)
+)
 
-class CardinalGrid:
-    _neighbors = (
-        # Left, Right, Up, Down
-        (-1, 0), (1, 0), (0, -1), (0, 1)
-    )
+DIAGONAL_NEIGHBORS = CARDINAL_NEIGHBORS + (
+    (-1, -1), (1, -1), (-1, 1), (1, 1)
+)
+
+
+class SimpleGrid:
+    _neighbors = CARDINAL_NEIGHBORS
 
     def __init__(self, charter: Iterable[Iterable[Any]]) -> None:
         self.state = [list(line) for line in charter]
@@ -47,12 +52,41 @@ class CardinalGrid:
                 yield (n_x, n_y)
 
 
-class DiagonalGrid(CardinalGrid):
-    _neighbors = (
-        # Up/Left, Up, Up/Right,
-        (-1, -1), (0, -1), (1, -1),
-        # Left, Right
-        (-1, 0), (1, 0),
-        # Down/Left, Down, Down/Right
-        (-1, 1), (0, 1), (1, 1)
-    )
+class SparseGrid(object):
+    _neighbors = CARDINAL_NEIGHBORS
+
+    def __init__(self, seed: Optional[Dict[Position, Any]] = None) -> None:
+        self.state = seed or {}
+
+    def __str__(self) -> str:
+        keys = list(self)
+        x_spread = [x for x, _ in keys]
+        y_spread = [y for _, y in keys]
+        x_range = range(min(x_spread), max(x_spread) + 1)
+        y_range = range(max(y_spread), min(y_spread) - 1, -1)
+
+        return "\n".join(
+            "".join(
+                self.get((x, y), ".")
+                for x in x_range
+            ) for y in y_range
+        )
+
+    def __getitem__(self, position: Position) -> Any:
+        return self.state[position]
+
+    def __setitem__(self, position: Position, value: Any) -> None:
+        self.state[position] = value
+
+    def __iter__(self) -> Iterator[Position]:
+        yield from self.state.keys()
+
+    def get(self, position: Position, default=None) -> Any:
+        return self.state.get(position, default)
+
+    def values(self):
+        return self.state.values()
+
+
+class DiagonalMixin:
+    _neighbors = DIAGONAL_NEIGHBORS

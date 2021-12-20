@@ -14,13 +14,13 @@ TEST_DOTS = [
 class TestTask(TestCase):
     def test_part1(self):
         paper = FoldableGrid(TEST_DOTS)
-        self.assertEqual(len(paper.dots), 18)
+        self.assertEqual(len(paper.values()), 18)
 
         paper.fold("y=7")
-        self.assertEqual(len(paper.dots), 17)
+        self.assertEqual(len(paper.values()), 17)
 
         paper.fold("x=5")
-        self.assertEqual(len(paper.dots), 16)
+        self.assertEqual(len(paper.values()), 16)
 
     def test_part2(self):
         pass

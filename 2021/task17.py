@@ -1,7 +1,7 @@
 # coding=utf-8
 import re
 from .utils import load_input
-# from .models import SparseGrid
+from .models import SparseGrid
 
 
 def parse_target(description):
