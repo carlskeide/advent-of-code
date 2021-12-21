@@ -67,7 +67,7 @@ class SparseGrid(object):
 
         return "\n".join(
             "".join(
-                self.get((x, y), ".")
+                str(self.get((x, y), "."))
                 for x in x_range
             ) for y in y_range
         )
@@ -80,6 +80,11 @@ class SparseGrid(object):
 
     def __iter__(self) -> Iterator[Position]:
         yield from self.state.keys()
+
+    def neighbors(self, position: Position) -> Iterator[Position]:
+        x, y = position
+        for delta_x, delta_y in self._neighbors:
+            yield (x + delta_x, y + delta_y)
 
     def get(self, position: Position, default=None) -> Any:
         return self.state.get(position, default)
