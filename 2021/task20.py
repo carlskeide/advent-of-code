@@ -50,5 +50,6 @@ if __name__ == "__main__":
     image.enhance()
     print(f"Part 1: {image.pixels}")
 
-    part2 = ""
-    print(f"Part 2: {part2}")
+    for _ in range(48):
+        image.enhance()
+    print(f"Part 2: {image.pixels}")
