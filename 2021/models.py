@@ -66,8 +66,9 @@ class SparseGrid(object):
 
     def __str__(self) -> str:
         keys = list(self)
-        x_spread = [x for x, _ in keys]
-        y_spread = [y for _, y in keys]
+        x_spread = {x for x, _ in keys}
+        y_spread = {y for _, y in keys}
+
         x_range = range(min(x_spread), max(x_spread) + 1)
         y_range = range(max(y_spread), min(y_spread) - 1, -1)
 
@@ -121,17 +122,18 @@ class SparseCube(SparseGrid):
 
     def __str__(self) -> str:
         keys = list(self)
-        x_spread = [x for x, _, _ in keys]
-        y_spread = [y for _, y, _ in keys]
-        z_spread = [z for _, _, z in keys]
+        x_spread = {x for x, _, _ in keys}
+        y_spread = {y for _, y, _ in keys}
+        z_spread = {z for _, _, z in keys}
+
         x_range = range(min(x_spread), max(x_spread) + 1)
         y_range = range(max(y_spread), min(y_spread) - 1, -1)
-        z_range = range(max(z_spread), min(z_spread) + 1)
+        z_range = range(min(z_spread), max(z_spread) + 1)
 
         return "\n\n".join(
-            "\n".join(
+            f"z{z}:\n" + "\n".join(
                 "".join(
-                    str(self.get((x, y), "."))
+                    str(self.get((x, y, z), "."))
                     for x in x_range
                 ) for y in y_range
             ) for z in z_range
