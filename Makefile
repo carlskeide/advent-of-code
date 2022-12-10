@@ -7,19 +7,19 @@ ifeq ($(month), 12)
 else
 	day ?= 1
 endif
-f = $(shell printf "task%02d" ${day})
+task = $(shell printf "task%02d" ${day})
 
 new:
 ifneq (,$(wildcard ./${year}/${f}.py))
 	# Day exists
 else
-	sed -e 's/{{ day }}/${day}/g' task.tpl > "${year}/${f}.py"
-	sed -e 's/{{ task }}/${f}/g' test_task.tpl > "${year}/${f}_test.py"
-	touch "${year}/${f}.input"
+	sed -e 's/{{ year }}/${year}/g' -e 's/{{ day }}/${day}/g' ./templates/task.tpl > "./src/aoc${year}/${task}.py"
+	sed -e 's/{{ task }}/${task}/g' ./templates/test_task.tpl > "./src/aoc${year}/${task}_test.py"
+	touch "./data/aoc${year}/${task}.txt"
 endif
 
 run:
-	/usr/bin/time -f'Time: %E' -- python3 -m "${year}.${f}"
+	/usr/bin/time -f'Time: %E' -- python3 -m "src.aoc${year}.${task}"
 
 test:
-	python -m unittest -v "${year}.${f}_test"
+	python -m unittest -v "src.aoc${year}.${task}_test"
