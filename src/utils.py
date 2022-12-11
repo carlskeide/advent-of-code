@@ -1,6 +1,6 @@
 # coding=utf-8
 from pathlib import Path
-from itertools import tee
+from itertools import tee, zip_longest
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_DIR / "data"
@@ -19,3 +19,18 @@ def pairwise(iterable):
     a, b = tee(iterable)
     next(b, None)
     return zip(a, b)
+
+def grouper(iterable, n, *, incomplete='fill', fillvalue=None):
+    """ Collect data into non-overlapping fixed-length chunks or blocks
+    from: https://docs.python.org/3/library/itertools.html#itertools-recips
+    """
+    args = [iter(iterable)] * n
+
+    if incomplete == 'fill':
+        return zip_longest(*args, fillvalue=fillvalue)
+    if incomplete == 'strict':
+        return zip(*args, strict=True)
+    if incomplete == 'ignore':
+        return zip(*args)
+    else:
+        raise ValueError('Expected fill, strict, or ignore')
