@@ -17,4 +17,6 @@ class TestTask(TestCase):
         self.assertEqual(visible_trees(self.heightmap), 21)
 
     def test_part2(self):
-        pass
+        self.assertEqual(score(self.heightmap, 2, 1), 4)
+        self.assertEqual(score(self.heightmap, 2, 3), 8)
+

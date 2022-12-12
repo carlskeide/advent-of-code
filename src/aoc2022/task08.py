@@ -23,6 +23,32 @@ def visible_trees(heightmap):
 
     return border + inner
 
+
+def score(heightmap, x, y):
+    tree = heightmap[y][x]
+    row = heightmap[y]
+    col = [line[x] for line in heightmap]
+    vectors = (
+        reversed(row[:x]),
+        row[x + 1:],
+        reversed(col[:y]),
+        col[y + 1:]
+    )
+
+    score = 1
+    for vector in vectors:
+        vector_score = 0
+        for height in vector:
+            vector_score += 1
+            if height >= tree:
+                break
+
+        if vector_score:
+            score *= vector_score
+
+    return score
+
+
 if __name__ == "__main__":
     heightmap = [
         [int(c) for c in line]
@@ -32,5 +58,9 @@ if __name__ == "__main__":
     part1 = visible_trees(heightmap)
     print(f"Part 1: {part1}")
 
-    part2 = ""
+    part2 = max(
+        score(heightmap, x, y)
+        for y in range(len(heightmap))
+        for x in range(len(heightmap[0]))
+    )
     print(f"Part 2: {part2}")
