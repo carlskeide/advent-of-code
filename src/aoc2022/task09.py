@@ -11,10 +11,10 @@ class Rope(DiagonalMixin, SparseGrid):
         "R": (1, 0),
     }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, length=2):
+        super().__init__()
 
-        self.head = self.tail = (0, 0)
+        self.nodes = [(0, 0)] * length
         self[(0, 0)] = "s"
 
 
@@ -22,37 +22,45 @@ class Rope(DiagonalMixin, SparseGrid):
         head_dx, head_dy = self.moves[direction]
 
         for _ in range(distance):
-            head_x, head_y = self.head
-            self.head = (head_x + head_dx, head_y + head_dy)
+            head_x, head_y = self.nodes[0]
+            self.nodes[0] = (head_x + head_dx, head_y + head_dy)
 
-            if (self.tail != self.head
-                and self.tail not in self.neighbors(self.head)):
+            for i in range(1, len(self.nodes)):
+                node = self.nodes[i]
+                prev_node = self.nodes[i - 1]
 
-                tail_x, tail_y = self.tail
-                if self.head[0] != self.tail[0]:
-                    tail_x += 1 if self.head[0] > self.tail[0] else -1
+                if (node != prev_node
+                    and node not in self.neighbors(prev_node)):
 
-                if self.head[1] != self.tail[1]:
-                    tail_y += 1 if self.head[1] > self.tail[1] else -1
+                    node_x, node_y = node
+                    prev_x, prev_y = prev_node
 
-                self.tail = (tail_x, tail_y)
+                    if prev_x != node_x:
+                        node_x += 1 if prev_x > node_x else -1
 
-            self[self.tail] = "#"
+                    if prev_y != node_y:
+                        node_y += 1 if prev_y > node_y else -1
 
+                    self.nodes[i] = (node_x, node_y)
+
+            self[self.nodes[-1]] = "#"
 
 
 if __name__ == "__main__":
-    instruction = (
+    instructions = [
         (direction, int(distance)) for direction, distance
         in map(str.split, load_input(year=2022, day=9))
-    )
+    ]
 
-    rope = Rope()
-    for direction, distance in instruction:
+    rope = Rope(length=2)
+    for direction, distance in instructions:
         rope.move(direction, distance)
 
     part1 = len(rope.values())
     print(f"Part 1: {part1}")
 
-    part2 = ""
+    rope = Rope(length=10)
+    for direction, distance in instructions:
+        rope.move(direction, distance)
+    part2 = len(rope.values())
     print(f"Part 2: {part2}")

@@ -5,7 +5,7 @@ from .task09 import *
 
 
 class TestTask(TestCase):
-    sample_instructions = [
+    simple_instructions = [
         ("R", 4),
         ("U", 4),
         ("L", 3),
@@ -15,16 +15,35 @@ class TestTask(TestCase):
         ("L", 5),
         ("R", 2)
     ]
+    complex_instructions = [
+        ("R", 5),
+        ("U", 8),
+        ("L", 8),
+        ("D", 3),
+        ("R", 17),
+        ("D", 10),
+        ("L", 25),
+        ("U", 20)
+    ]
 
-    def test_part1(self):
-        rope = Rope()
-        for direction, distance in self.sample_instructions:
+    def test_short_rope(self):
+        rope = Rope(length=2)
+        for direction, distance in self.simple_instructions:
             rope.move(direction, distance)
 
         self.assertEqual(len(rope.values()), 13)
+        self.assertEqual(rope.nodes, [(2,-2), (1,-2)])
 
-        self.assertEqual(rope.head, (2,-2))
-        self.assertEqual(rope.tail, (1,-2))
+    def test_long_rope(self):
+        rope = Rope(length=10)
+        for direction, distance in self.simple_instructions:
+            rope.move(direction, distance)
 
-    def test_part2(self):
-        pass
+        self.assertEqual(len(rope.values()), 1)
+
+    def test_long_rope_complex(self):
+        rope = Rope(length=10)
+        for direction, distance in self.complex_instructions:
+            rope.move(direction, distance)
+
+        self.assertEqual(len(rope.values()), 36)
