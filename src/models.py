@@ -65,12 +65,9 @@ class SparseGrid(object):
         self.state = seed or {}
 
     def __str__(self) -> str:
-        keys = list(self)
-        x_spread = {x for x, _ in keys}
-        y_spread = {y for _, y in keys}
-
-        x_range = range(min(x_spread), max(x_spread) + 1)
-        y_range = range(max(y_spread), min(y_spread) - 1, -1)
+        min_edge, max_edge = self.size()
+        x_range = range(min_edge[0], max_edge[0] + 1)
+        y_range = range(max_edge[1], min_edge[1] - 1, -1)
 
         return "\n".join(
             "".join(
@@ -82,7 +79,9 @@ class SparseGrid(object):
     def __getitem__(self, position: Union[PosND, slice]) -> Any:
         if isinstance(position, slice):
             return (
-                self[pos] for pos in self.area(position.start, position.stop)
+                self[pos] for pos
+                in self.area(position.start, position.stop)
+                if pos in self.state
             )
 
         else:
@@ -93,6 +92,16 @@ class SparseGrid(object):
 
     def __iter__(self) -> Iterator[PosND]:
         yield from self.state.keys()
+
+    def size(self) -> Tuple[Pos2D, Pos2D]:
+        keys = list(self)
+        x_spread = {x for x, _ in keys}
+        y_spread = {y for _, y in keys}
+
+        return (
+            (min(x_spread), min(y_spread)),
+            (max(x_spread), max(y_spread)),
+        )
 
     def area(self, start: Pos2D, stop: Pos2D) -> Iterator[Pos2D]:
         min_x, min_y = start
@@ -121,14 +130,10 @@ class SparseCube(SparseGrid):
     )
 
     def __str__(self) -> str:
-        keys = list(self)
-        x_spread = {x for x, _, _ in keys}
-        y_spread = {y for _, y, _ in keys}
-        z_spread = {z for _, _, z in keys}
-
-        x_range = range(min(x_spread), max(x_spread) + 1)
-        y_range = range(max(y_spread), min(y_spread) - 1, -1)
-        z_range = range(min(z_spread), max(z_spread) + 1)
+        min_edge, max_edge = self.size()
+        x_range = range(min_edge[0], max_edge[0] + 1)
+        y_range = range(max_edge[1], min_edge[1] - 1, -1)
+        z_range = range(min_edge[2], max_edge[2] + 1)
 
         return "\n\n".join(
             f"z{z}:\n" + "\n".join(
@@ -137,6 +142,17 @@ class SparseCube(SparseGrid):
                     for x in x_range
                 ) for y in y_range
             ) for z in z_range
+        )
+
+    def size(self) -> Tuple[Pos3D, Pos3D]:
+        keys = list(self)
+        x_spread = {x for x, _, _ in keys}
+        y_spread = {y for _, y, _ in keys}
+        z_spread = {z for _, _, z in keys}
+
+        return (
+            (min(x_spread), min(y_spread), min(z_spread)),
+            (max(x_spread), max(y_spread), max(z_spread)),
         )
 
     def area(self, start: Pos3D, stop: Pos3D) -> Iterator[Pos3D]:
