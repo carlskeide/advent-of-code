@@ -31,9 +31,8 @@ class TestTask(TestCase):
         )
 
     def test_part1(self):
-        zone = Zone(self.sample_input)
-        row = zone[(-10, 10):(30, 10)]
-        self.assertEqual(sum(tile == "#" for tile in row), 26)
+        zone = Zone(self.sample_input, watch_row=10)
+        self.assertEqual(len(zone.empty), 26)
 
     def test_part2(self):
         pass
