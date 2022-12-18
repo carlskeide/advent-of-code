@@ -65,7 +65,7 @@ class SparseGrid(object):
         self.state = seed or {}
 
     def __str__(self) -> str:
-        min_edge, max_edge = self.size()
+        min_edge, max_edge = self.size
         x_range = range(min_edge[0], max_edge[0] + 1)
         y_range = range(max_edge[1], min_edge[1] - 1, -1)
 
@@ -93,6 +93,7 @@ class SparseGrid(object):
     def __iter__(self) -> Iterator[PosND]:
         yield from self.state.keys()
 
+    @property
     def size(self) -> Tuple[Pos2D, Pos2D]:
         keys = list(self)
         x_spread = {x for x, _ in keys}
@@ -130,7 +131,7 @@ class SparseCube(SparseGrid):
     )
 
     def __str__(self) -> str:
-        min_edge, max_edge = self.size()
+        min_edge, max_edge = self.size
         x_range = range(min_edge[0], max_edge[0] + 1)
         y_range = range(max_edge[1], min_edge[1] - 1, -1)
         z_range = range(min_edge[2], max_edge[2] + 1)
@@ -144,6 +145,7 @@ class SparseCube(SparseGrid):
             ) for z in z_range
         )
 
+    @property
     def size(self) -> Tuple[Pos3D, Pos3D]:
         keys = list(self)
         x_spread = {x for x, _, _ in keys}
