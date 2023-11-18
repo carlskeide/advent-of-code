@@ -1,9 +1,9 @@
 # coding=utf-8
 from ..utils import load_input
-from ..models import SparseGrid, DiagonalMixin
+from ..models import SparseGrid
 
 
-class Rope(DiagonalMixin, SparseGrid):
+class Rope(SparseGrid):
     moves = {
         "U": (0, -1),
         "D": (0, 1),
@@ -12,7 +12,7 @@ class Rope(DiagonalMixin, SparseGrid):
     }
 
     def __init__(self, length=2):
-        super().__init__()
+        super().__init__(cardinal=False)
 
         self.nodes = [(0, 0)] * length
         self[(0, 0)] = "s"

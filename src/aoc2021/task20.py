@@ -1,23 +1,17 @@
 # coding=utf-8
 from itertools import cycle
 from ..utils import load_input
-from ..models import SparseGrid, DiagonalMixin
+from ..models import SparseGrid
 
 
 class ImageGrid(SparseGrid):
-    _neighbors = (
-        (-1, 1), (0, 1), (1, 1),
-        (-1, 0), (0, 0), (1, 0),
-        (-1,-1), (0,-1), (1,-1)
-    )
-
     def __init__(self, image, algorithm):
         self.algorithm = algorithm
         self.default = cycle(".#" if algorithm.startswith("#") else "..")
 
         pixels = {
             (x, y): pixel
-            for y, line in enumerate(reversed(image.splitlines()))
+            for y, line in enumerate(image.splitlines())
             for x, pixel in enumerate(line)
         }
 
@@ -31,11 +25,13 @@ class ImageGrid(SparseGrid):
 
         default = next(self.default)
         new_state = {}
-        for pos in search:
-            bits = "".join(str(int(self.get(neighbor, default) == "#"))
-                           for neighbor in self.neighbors(pos))
+        for x, y in search:
+            bits = "".join(
+                str(int(self.get(pos, default) == "#"))
+                for pos in self.area((x - 1, y - 1), (x + 1, y + 1))
+            )
 
-            new_state[pos] = self.algorithm[int(bits, 2)]
+            new_state[x, y] = self.algorithm[int(bits, 2)]
 
         self.state = new_state
 
