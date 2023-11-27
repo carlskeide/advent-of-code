@@ -15,7 +15,7 @@ ifneq (,$(wildcard ./${year}/${f}.py))
 else
 	sed -e 's/{{ year }}/${year}/g' -e 's/{{ day }}/${day}/g' ./templates/task.tpl > "./src/aoc${year}/${task}.py"
 	sed -e 's/{{ task }}/${task}/g' ./templates/test_task.tpl > "./src/aoc${year}/${task}_test.py"
-	touch "./data/aoc${year}/${task}.txt"
+	touch "./private/aoc${year}/${task}.txt"
 endif
 
 run:

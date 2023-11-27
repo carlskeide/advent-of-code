@@ -3,7 +3,7 @@ from pathlib import Path
 from itertools import tee, zip_longest
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = PROJECT_DIR / "data"
+DATA_DIR = PROJECT_DIR / "private"
 
 
 def load_input(year, day, group_lines=False):
