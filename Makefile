@@ -34,3 +34,6 @@ run:
 
 test:
 	python -m unittest -v "src.aoc${year}.${task}_test"
+
+lint:
+	flake8 --extend-ignore F403,F405 ./src/aoc${year}/${task}*
