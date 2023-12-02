@@ -36,4 +36,5 @@ test:
 	python -m unittest -v "src.aoc${year}.${task}_test"
 
 lint:
-	flake8 --extend-ignore F403,F405 ./src/aoc${year}/${task}*
+	flake8 --extend-ignore F403,F405 --max-line-length=119 ./src/aoc${year}/${task}*
+	mypy ./src/aoc${year}/${task}.py
