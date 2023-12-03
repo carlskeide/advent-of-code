@@ -15,6 +15,7 @@ session := $(shell cat .session-cookie)
 new:
 	mkdir -p ./src/aoc${year}
 	mkdir -p ./private/aoc${year}
+	touch ./private/aoc${year}/__init__.py
 
 ifneq (,$(wildcard ./src/aoc${year}/${f}.py))
 	# Day exists
