@@ -5,7 +5,7 @@ from ..models import SimpleGrid
 
 class GameOfSquids(SimpleGrid):
     def __init__(self, charter):
-        super().__init__((map(int, line) for line in charter), cardinal=False)
+        super().__init__((map(int, line) for line in charter))
 
         self.steps = 0
         self.flashes = 0
@@ -22,7 +22,7 @@ class GameOfSquids(SimpleGrid):
 
             for position in hits:
                 flashed.add(position)
-                for neighbor in self.neighbors(position):
+                for neighbor in self.neighbors(position, cardinal=False):
                     self[neighbor] += 1
 
         self.flashes += len(flashed)

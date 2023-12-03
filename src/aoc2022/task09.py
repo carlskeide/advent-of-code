@@ -12,7 +12,7 @@ class Rope(SparseGrid):
     }
 
     def __init__(self, length=2):
-        super().__init__(cardinal=False)
+        super().__init__()
 
         self.nodes = [(0, 0)] * length
         self[(0, 0)] = "s"
@@ -30,7 +30,7 @@ class Rope(SparseGrid):
                 prev_node = self.nodes[i - 1]
 
                 if (node != prev_node
-                    and node not in self.neighbors(prev_node)):
+                    and node not in self.neighbors(prev_node, cardinal=False)):
 
                     node_x, node_y = node
                     prev_x, prev_y = prev_node

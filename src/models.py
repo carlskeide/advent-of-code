@@ -1,5 +1,5 @@
 # coding=utf-8
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Tuple, Dict, Iterable, Iterator, Union, Optional, Any
 
 Pos2D = Tuple[int, int]
@@ -29,7 +29,7 @@ ALL_3D = tuple(
 
 
 class SimpleGrid:
-    def __init__(self, charter: Charter, cardinal: bool = True) -> None:
+    def __init__(self, charter: Charter) -> None:
         self.state = [list(line) for line in charter]
 
         # Width is assumed to be consistent across lines
@@ -37,8 +37,6 @@ class SimpleGrid:
             "x": len(self.state[0]),
             "y": len(self.state)
         }
-
-        self.cardinal = cardinal
 
     def __str__(self) -> str:
         return "\n".join("".join(str(i) for i in line) for line in self.state)
@@ -60,18 +58,17 @@ class SimpleGrid:
         for line in self.state:
             yield from line
 
-    def neighbors(self, position: Pos2D) -> Iterator[Pos2D]:
+    def neighbors(self, position: Pos2D, cardinal: bool = True) -> Iterator[Pos2D]:
         x, y = position
-        for delta_x, delta_y in CARDINAL_2D if self.cardinal else ALL_2D:
+        for delta_x, delta_y in CARDINAL_2D if cardinal else ALL_2D:
             n_x, n_y = x + delta_x, y + delta_y
             if (0 <= n_x < self.size["x"] and 0 <= n_y < self.size["y"]):
                 yield (n_x, n_y)
 
 
 class SparseBase(ABC):
-    def __init__(self, seed: Seed = None, cardinal: bool = True) -> None:
+    def __init__(self, seed: Seed = None) -> None:
         self.state = seed or {}
-        self.cardinal = cardinal
 
     def __getitem__(self, position: Union[PosND, slice]) -> Any:
         if isinstance(position, slice):
@@ -95,6 +92,20 @@ class SparseBase(ABC):
 
     def values(self):
         return self.state.values()
+
+    @property
+    @abstractmethod
+    def size(self) -> Tuple[PosND, PosND]:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def area(start: PosND, stop: PosND) -> Iterator[PosND]:
+        pass
+
+    @abstractmethod
+    def neighbors(self, position: PosND, cardinal: bool = True) -> Iterator[PosND]:
+        pass
 
 
 class SparseGrid(SparseBase):
@@ -129,9 +140,9 @@ class SparseGrid(SparseBase):
             for x in range(min_x, max_x + 1):
                 yield (x, y)
 
-    def neighbors(self, position: Pos2D) -> Iterator[Pos2D]:
+    def neighbors(self, position: Pos2D, cardinal: bool = True) -> Iterator[Pos2D]:
         x, y = position
-        for delta_x, delta_y in CARDINAL_2D if self.cardinal else ALL_2D:
+        for delta_x, delta_y in CARDINAL_2D if cardinal else ALL_2D:
             yield (x + delta_x, y + delta_y)
 
 
@@ -172,8 +183,8 @@ class SparseCube(SparseBase):
                 for x in range(min_x, max_x + 1):
                     yield (x, y, z)
 
-    def neighbors(self, position: Pos3D) -> Iterator[Pos3D]:
+    def neighbors(self, position: Pos3D, cardinal: bool = True) -> Iterator[Pos3D]:
         x, y, z = position
-        directions = CARDINAL_3D if self.cardinal else ALL_3D
+        directions = CARDINAL_3D if cardinal else ALL_3D
         for delta_x, delta_y, delta_z in directions:
             yield (x + delta_x, y + delta_y, z + delta_z)
