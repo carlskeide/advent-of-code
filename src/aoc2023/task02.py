@@ -1,5 +1,6 @@
 # coding=utf-8
 import operator
+import re
 from functools import reduce
 
 from ..utils import load_input
@@ -9,16 +10,11 @@ def parse_input(line: str) -> dict:
     game, draws = line.split(": ")
     parsed = {
         "id": int(game.split()[-1]),
-        "draws": []
+        "draws":  [
+            {k: int(v) for v, k in re.findall(r"(?:(\d+) (\w+))", draw)}
+            for draw in draws.split(';')
+        ]
     }
-
-    for draw in draws.split("; "):
-        draw_dict = {}
-        for group in draw.split(", "):
-            count, color = group.split()
-            draw_dict[color] = int(count)
-
-        parsed["draws"].append(draw_dict)
 
     return parsed
 
