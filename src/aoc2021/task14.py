@@ -1,8 +1,9 @@
 # coding=utf-8
 from collections import Counter
 from functools import lru_cache
+from itertools import pairwise
 
-from ..utils import load_input, pairwise
+from ..utils import load_input
 
 
 class Polymer:

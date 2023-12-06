@@ -14,12 +14,6 @@ def load_input(year, day, group_lines=False):
     return content.split("\n\n") if group_lines else content.splitlines()
 
 
-def pairwise(iterable):
-    """ Included in python >= 3.10 """
-    a, b = tee(iterable)
-    next(b, None)
-    return zip(a, b)
-
 def grouper(iterable, n, *, incomplete='fill', fillvalue=None):
     """ Collect data into non-overlapping fixed-length chunks or blocks
     from: https://docs.python.org/3/library/itertools.html#itertools-recips
