@@ -28,6 +28,76 @@ ALL_3D = tuple(
 )
 
 
+class LoopError(Exception):
+    pass
+
+
+class LinkedNode:
+    def __init__(self, val: Any) -> None:
+        self.val = val
+        self.prev = None
+        self.next = None
+
+    def __str__(self) -> str:
+        return (
+            f"{"<-" if self.prev else ""}{self.val}{"->" if self.prev else ""}"
+        )
+
+    def __iter__(self) -> Iterator["LinkedNode"]:
+        node = self
+        while True:
+            yield node
+            node = node.next
+            if node is None or node is self:
+                return
+
+    def append(self, node: "LinkedNode") -> None:
+        if self.next is not None:
+            raise ValueError("Base Node is already linked.")
+
+        elif node.prev is not None:
+            raise ValueError("Append Node is already linked.")
+
+        self.next, node.prev = node, self
+
+    def remove(self) -> "LinkedNode":
+        prev_node = self.prev
+        prev_node.next, self.next.prev = self.next, prev_node
+        self.next, self.prev = None, None
+        return prev_node
+
+    def splice(self, node: "LinkedNode") -> None:
+        if self.next is None:
+            raise ValueError("Base node is not linked.")
+
+        elif (node.next, node.prev) != (None, None):
+            raise ValueError("Splice Node is already linked.")
+
+        node.prev, node.next = self, self.next
+        self.next = node.next.prev = node
+
+    def seek(self, distance: int) -> "LinkedNode":
+        node = self
+        for _ in range(abs(distance)):
+            node = node.next if distance > 0 else node.prev
+            if node is None:
+                raise IndexError()
+
+        return node
+
+    def find(self, needle: Any, reverse: bool = False) -> "LinkedNode":
+        node = self
+        while node.val != needle:
+            node = node.prev if reverse else node.next
+            if node is None:
+                raise ValueError()
+
+            elif node is self:
+                raise LoopError()
+
+        return node
+
+
 class SimpleGrid:
     def __init__(self, charter: Charter) -> None:
         self.state = [list(line) for line in charter]
