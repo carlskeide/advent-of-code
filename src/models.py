@@ -124,6 +124,14 @@ class SimpleGrid:
             for x in range(self.size["x"]):
                 yield (x, y)
 
+    def index(self, needle: Any) -> Pos2D:
+        for y, line in enumerate(self.state):
+            for x, val in enumerate(line):
+                if needle == val:
+                    return (x, y)
+        else:
+            raise ValueError(f"{needle} is not in grid.")
+
     def values(self) -> Iterator[Any]:
         for line in self.state:
             yield from line
