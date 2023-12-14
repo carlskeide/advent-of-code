@@ -1,5 +1,6 @@
 # coding=utf-8
 from abc import ABC, abstractmethod
+from itertools import chain
 from typing import Tuple, Dict, Iterable, Iterator, Union, Optional, Any
 
 Pos2D = Tuple[int, int]
@@ -26,6 +27,13 @@ ALL_3D = tuple(
     (x, y, z) for z in range(-1, 2) for y in range(-1, 2) for x in range(-1, 2)
     if (x, y, z) != (0, 0, 0)
 )
+
+DIRECTIONS = {
+    "n": (0, -1),
+    "s": (0, 1),
+    "e": (1, 0),
+    "w": (-1, 0)
+}
 
 
 class LoopError(Exception):
@@ -144,6 +152,16 @@ class SimpleGrid:
     def values(self) -> Iterator[Any]:
         for line in self.state:
             yield from line
+
+    def neighbor(self, position: Pos2D, direction: str) -> Pos2D:
+        x, y = position
+        delta_x, delta_y = DIRECTIONS[direction]
+        n_x, n_y = x + delta_x, y + delta_y
+
+        if not (0 <= n_x < self.size["x"] and 0 <= n_y < self.size["y"]):
+            raise IndexError()
+
+        return (n_x, n_y)
 
     def neighbors(self, position: Pos2D, cardinal: bool = True) -> Iterator[Pos2D]:
         x, y = position
