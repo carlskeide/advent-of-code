@@ -29,4 +29,14 @@ class TestTask(TestCase):
         self.assertEqual(vert_map.value(), 5)
 
     def test_part2(self):
-        pass
+        vert_map = MirrorMap((
+            "#.##..##.",
+            "..#.##.#.",
+            "##......#",
+            "##......#",
+            "..#.##.#.",
+            "..##..##.",
+            "#.#.##.#."
+        ))
+        self.assertEqual(vert_map.value(), 5)
+        self.assertEqual(vert_map.value(fuzzy=True), 300)

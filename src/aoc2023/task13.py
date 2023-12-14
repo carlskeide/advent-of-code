@@ -1,25 +1,41 @@
 # coding=utf-8
+from typing import Any
+from itertools import chain
 from ..utils import load_input
 from ..models import SimpleGrid
 
 
-class MirrorMap(SimpleGrid):
-    def value(self):
-        for y in range(1, self.size["y"]):
-            window = min(y, self.size["y"] - y)
-            if self.state[y - 1::-1][:window] == self.state[y:][:window]:
-                return y * 100
+def find_reflection(grid: list[list[Any]], fuzzy: bool, skip: int) -> int:
+    size = len(grid)
+    for i in (i for i in range(1, size) if i != skip):
+        window = min(i, size - i)
+        diffs = sum(
+            pair[0] != pair[1] for pair in zip(
+                chain(*grid[i - 1::-1][:window]),
+                chain(*grid[i:][:window])
+            )
+        )
+        if diffs <= int(fuzzy):
+            return i
 
-        cols = [
-            [self.state[y][x] for y in range(self.size["y"])]
-            for x in range(self.size["x"])
-        ]
-        for x in range(1, self.size["x"]):
-            window = min(x, self.size["x"] - x)
-            if cols[x - 1::-1][:window] == cols[x:][:window]:
-                return x
+
+class MirrorMap(SimpleGrid):
+    def __init__(self, charter):
+        super().__init__(charter)
+        self.matched = {"x": 0, "y": 0}
+
+    def value(self, fuzzy=False):
+        if (y:= find_reflection(self.state, fuzzy, self.matched["y"])):
+            self.matched["y"] = y
+            return y * 100
+
+        cols = list(self.columns())
+        if (x := find_reflection(cols, fuzzy, self.matched["x"])):
+            self.matched["x"] = x
+            return x
 
         raise ValueError("No mirror found!")
+
 
 if __name__ == "__main__":
     task_input = load_input(year=2023, day=13, group_lines=True)
@@ -30,5 +46,5 @@ if __name__ == "__main__":
     part1 = sum(mmap.value() for mmap in maps)
     print(f"Part 1: {part1}")
 
-    part2 = ""
+    part2 = sum(mmap.value(fuzzy=True) for mmap in maps)
     print(f"Part 2: {part2}")

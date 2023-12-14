@@ -132,6 +132,15 @@ class SimpleGrid:
         else:
             raise ValueError(f"{needle} is not in grid.")
 
+    def rows(self) -> Iterator[list[Any]]:
+        return iter(self.state)
+
+    def columns(self) -> Iterator[list[Any]]:
+        return (
+            [self.state[y][x] for y in range(self.size["y"])]
+            for x in range(self.size["x"])
+        )
+
     def values(self) -> Iterator[Any]:
         for line in self.state:
             yield from line
