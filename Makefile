@@ -14,10 +14,11 @@ session := $(shell cat .session-cookie)
 
 new:
 	mkdir -p ./src/aoc${year}
+	touch ./src/aoc${year}/__init__.py
 	mkdir -p ./private/aoc${year}
 	touch ./private/aoc${year}/__init__.py
 
-ifneq (,$(wildcard ./src/aoc${year}/${f}.py))
+ifneq (,$(wildcard ./src/aoc${year}/${task}.py))
 	# Day exists
 else
 	sed -e 's/{{ year }}/${year}/g' -e 's/{{ day }}/${day}/g' ./templates/task.tpl > "./src/aoc${year}/${task}.py"
