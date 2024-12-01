@@ -1,12 +1,16 @@
 # coding=utf-8
-from ..utils import load_input
+from typing import Any
+
+from .. import BaseTask
 
 
-if __name__ == "__main__":
-    task_input = load_input(year={{ year }}, day={{ day }}, group_lines=False)
+class Task(BaseTask):
+    @staticmethod
+    def parse_input(task_input: list[str]) -> Any:
+        return task_input
 
-    part1 = ""
-    print(f"Part 1: {part1}")
+    def part1(self) -> int:
+        return 0
 
-    part2 = ""
-    print(f"Part 2: {part2}")
+    def part2(self) -> int:
+        return 0

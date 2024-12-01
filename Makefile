@@ -32,7 +32,7 @@ else
 endif
 
 run:
-	/usr/bin/time -f'Time: %E' -- python3 -m "src.aoc${year}.${task}"
+	python3 -c "from src.aoc${year}.${task} import Task; Task().run()"
 
 test:
 	python -m unittest -v "src.aoc${year}.${task}_test"
